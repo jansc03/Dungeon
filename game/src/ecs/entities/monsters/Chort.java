@@ -7,9 +7,8 @@ import ecs.components.ai.AIComponent;
 import ecs.components.ai.fight.CollideAI;
 import ecs.components.ai.idle.PatrouilleWalk;
 import ecs.components.ai.transition.RangeTransition;
-import ecs.entities.Entity;
 import graphic.Animation;
-import starter.Game;
+
 
 public class Chort extends BasicMonster {
 

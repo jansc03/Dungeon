@@ -151,7 +151,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();
-        if(new File ("save.ser").exists()) {
+        if (new File("save.ser").exists()) {
             loader.loadSave();
         }
     }
@@ -171,17 +171,15 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     @Override
     public void onLevelLoad() {
         currentLevel = levelAPI.getCurrentLevel();
-        if(currentDepth>0){
+        if (currentDepth > 0) {
             loader.writeSave();
         }
-        for(Entity entity : entities){
+        for (Entity entity : entities) {
             System.out.println(entity.getClass().getSimpleName());
         }
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
         teleportsystem.makePads();                       // bei jeden neuen level aufrufen der Methode//
-
-
 
 
         // Erstellen und platzieren Sie eine zufällige Anzahl von Monstern basierend auf der aktuellen Tiefe
@@ -202,7 +200,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
 
         // Erhöhen Sie die Anzahl der Monster und die Anzahl starker Monster, je tiefer der Spieler im Dungeon ist
         for (int i = 2; i <= currentDepth; i++) {
-            numMonsters +=  + 1;
+            numMonsters += +1;
             numStrongMonsters += 1;
         }
 
@@ -228,7 +226,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         switch (monsterType) {
             case 0:
                 monster = new Chort();
-                if(currentDepth > 3) {
+                if (currentDepth > 3) {
                     monster = new Chort();
                 }
                 // Passen Sie die Stärke des Chort-Monsters basierend auf der Tiefe an
@@ -315,8 +313,6 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
     }
 
 
-
-
     /**
      * Toggle between pause and run
      */
@@ -377,13 +373,18 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         return Optional.ofNullable(hero);
     }
 
-    public static void setCurrentLevel(ILevel levelToLoad){currentLevel=levelToLoad;}
+    public static void setCurrentLevel(ILevel levelToLoad) {
+        currentLevel = levelToLoad;
+    }
 
-    public static void loadEntities(HashSet<Entity> load){
+    public static void loadEntities(HashSet<Entity> load) {
         entitiesToAdd.addAll(load);
     }
-    public static void setHeroPosition(PositionComponent pos){hero.removeComponent(PositionComponent.class);hero.addComponent(pos);}
 
+    public static void setHeroPosition(PositionComponent pos) {
+        hero.removeComponent(PositionComponent.class);
+        hero.addComponent(pos);
+    }
 
 
     /**
@@ -424,10 +425,21 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         new SkillSystem();
         new ProjectileSystem();
     }
-    public int getLevelcounter(){return currentDepth;}
-    public void setLevelcounter(int level){this.currentDepth=level;}
 
-    public Teleportsystem getTeleportsystem(){return teleportsystem;}
-    public void setTeleportsystem(Teleportsystem teleport){teleportsystem=teleport;}
+    public int getLevelcounter() {
+        return currentDepth;
+    }
+
+    public void setLevelcounter(int level) {
+        this.currentDepth = level;
+    }
+
+    public Teleportsystem getTeleportsystem() {
+        return teleportsystem;
+    }
+
+    public void setTeleportsystem(Teleportsystem teleport) {
+        teleportsystem = teleport;
+    }
 
 }

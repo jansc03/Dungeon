@@ -12,21 +12,31 @@ import starter.Game;
 import java.io.*;
 import java.util.ArrayList;
 
-
 public class SafeandLoad {
     private final Game game;
-    public SafeandLoad(Game game){
+
+    /**
+     * Konstruktor der Klasse SafeandLoad.
+     *
+     * @param game das Spiel, das gespeichert oder geladen werden soll
+     */
+    public SafeandLoad(Game game) {
         this.game = game;
     }
 
-    /** Writes Savedata into a savefile*/
-    public void writeSave(){
+
+    /**
+     * Schreibt den aktuellen Spielstand in eine Datei.
+     */
+    public void writeSave() {
         DataStorage data = new DataStorage();
 
+        // Speichert die Anzahl der Level
         data.setLevelCount(game.getLevelcounter());
 
+        // Speichert eine Liste aller Entity-Klassen im Spiel
         ArrayList<String> entityList = new ArrayList<>();
-        for(Entity entity : Game.getEntities()){
+        for (Entity entity : Game.getEntities()) {
             entityList.add(entity.getClass().getSimpleName());
         }
         data.setEntities(entityList);
@@ -42,8 +52,10 @@ public class SafeandLoad {
         }
     }
 
-    /** Loads savedata from a savefile*/
-    public void loadSave(){
+    /**
+     * Lädt den Spielstand aus einer Datei.
+     */
+    public void loadSave() {
         FileInputStream fis;
         ObjectInputStream in;
         DataStorage data = new DataStorage();
@@ -55,9 +67,14 @@ public class SafeandLoad {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        // Setzt die Anzahl der Level auf den Wert aus dem gespeicherten Spielstand
         game.setLevelcounter(data.getLevelCount());
+
+        // Erstellt Teleport-Pads für das aktuelle Level
         game.getTeleportsystem().makePads();
-        for(String entity : data.getEntities()){
+
+        // Fügt alle Entities aus dem gespeicherten Spielstand zum Spiel hinzu
+        for (String entity : data.getEntities()) {
             switch (entity) {
                 case "Chort" -> Game.getEntitiesToAdd().add(new Chort());
                 case "Goblin" -> Game.getEntitiesToAdd().add(new Goblin());
