@@ -9,7 +9,11 @@ import graphic.Animation;
 import starter.Game;
 import tools.Point;
 
+import java.util.logging.Logger;
+
 public abstract class ReturnProjectileSkill implements ISkillFunction {
+
+    private static final Logger LOGGER = Logger.getLogger(ReturnProjectileSkill.class.getName());
 
     private String pathToTexturesOfProjectile;
     private float projectileSpeed;
@@ -52,29 +56,38 @@ public abstract class ReturnProjectileSkill implements ISkillFunction {
      */
     @Override
     public void execute(Entity entity) {
+        LOGGER.info("Executing skill: " + this.getClass().getSimpleName());
+
         Entity projectile = new Entity();
+
         PositionComponent epc = (PositionComponent) entity.getComponent(PositionComponent.class)
             .orElseThrow(() -> new MissingComponentException("PositionComponent"));
         new PositionComponent(projectile, epc.getPosition());
+
         Animation animation = AnimationBuilder.buildAnimation(pathToTexturesOfProjectile);
         new AnimationComponent(projectile, animation);
+
         Point aimedOn = selectionFunction.selectTargetPoint();
         Point targetPoint = SkillTools.calculateLastPositionInRange(epc.getPosition(), aimedOn, projectileRange);
         Point velocity = SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
+
         VelocityComponent vc = new VelocityComponent(projectile, velocity.x, velocity.y, animation, animation);
+
         new ProjectileComponent(projectile, epc.getPosition(), targetPoint);
+
         ICollide collide = (a, b, from) -> {
             if (b != entity) {
                 b.getComponent(HealthComponent.class)
                     .ifPresent(hc -> {
                         ((HealthComponent) hc).receiveHit(projectileDamage);
                         createReturnProjectile(projectile, entity, b);
-                         SkillTools.applyKnockback(b, entity, knockbackDistance);
+                        SkillTools.applyKnockback(b, entity, knockbackDistance);
                         Game.removeEntity(projectile);
                     });
             }
         };
         new HitboxComponent(projectile, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
+
     }
 
     /**
@@ -89,13 +102,18 @@ public abstract class ReturnProjectileSkill implements ISkillFunction {
         Point startPoint = getPosEntity(projectile);
         Point endPoint = getPosProjectile(projectile);
         new PositionComponent(returningProjectile, startPoint);
+
         Animation animation = AnimationBuilder.buildAnimation(pathToTexturesOfProjectile);
         new AnimationComponent(returningProjectile, animation);
+
         Point aimedOn = endPoint;
         Point targetPoint = SkillTools.calculateLastPositionInRange(startPoint, aimedOn, projectileRange);
         Point velocity = SkillTools.calculateVelocity(startPoint, targetPoint, projectileSpeed);
+
         VelocityComponent vc = new VelocityComponent(returningProjectile, velocity.x, velocity.y, animation, animation);
+
         new ProjectileComponent(returningProjectile, startPoint, targetPoint);
+
         ICollide collide = (a, b, from) -> {
             if (b != entity && b != hitEntity) {
                 b.getComponent(HealthComponent.class)
