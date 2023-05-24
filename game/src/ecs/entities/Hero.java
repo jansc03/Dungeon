@@ -77,7 +77,5 @@ public class Hero extends Entity {
                 (you, other, direction) -> System.out.println("heroCollisionEnter"),
                 (you, other, direction) -> System.out.println("heroCollisionLeave"));
     }
-    private void setupInventoryComponent(){new InventoryComponent(this,20);}
-
-
+    private void setupInventoryComponent(){new InventoryComponent(this,20);}//Inventory with 20 space
 }

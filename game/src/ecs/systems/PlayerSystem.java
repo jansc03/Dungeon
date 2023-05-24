@@ -50,6 +50,7 @@ public class PlayerSystem extends ECS_System {
             ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
         else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))
             ksd.pc.getSkillSlot2().ifPresent(skill -> skill.execute(ksd.e));
+        //use Items
         else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_MAGICBOOK.get())){
             useMagicBook();
         }else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_FLEISCH.get())){
@@ -77,8 +78,7 @@ public class PlayerSystem extends ECS_System {
      */
 
     public void showInv(){
-        InventoryComponent invCom = (InventoryComponent)
-                                           Game.getHero().get().getComponent(InventoryComponent.class).get();
+        InventoryComponent invCom = (InventoryComponent)Game.getHero().get().getComponent(InventoryComponent.class).get();
         List<ItemData> inv = invCom.getItems();
         System.out.println("Inventar:");
         int counter=1;
@@ -96,9 +96,9 @@ public class PlayerSystem extends ECS_System {
         InventoryComponent inv = (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
         List<ItemData> items = inv.getItems();
         boolean done=false;
-        for(ItemData i:items){
-            if(i.getItemType()==ItemType.Book&&!done){
-                i.triggerUse(hero);
+        for(ItemData i:items){  //search for Book item
+            if(i.getItemType()==ItemType.Book&&!done){    //item found
+                i.triggerUse(hero);                       //use that item
                 done=true;
             }
         }
@@ -113,8 +113,8 @@ public class PlayerSystem extends ECS_System {
         List<ItemData> items = inv.getItems();
         boolean done=false;
         for(ItemData i:items){        //search for Potion item
-            if(i.getItemType()==ItemType.Potion&&!done){
-                i.triggerUse(hero);
+            if(i.getItemType()==ItemType.Potion&&!done){   //item found
+                i.triggerUse(hero);                //use
                 done=true;
             }
         }
@@ -129,7 +129,7 @@ public class PlayerSystem extends ECS_System {
         List<ItemData> items = inv.getItems();
         boolean done=false;
         for(ItemData i:items){         //search for food item
-            if(i.getItemType()==ItemType.Food&&!done){    // if first food item found
+            if(i.getItemType()==ItemType.Food&&!done){    // first food item found
                 i.triggerUse(hero);                       //use it
                 done=true;
             }
