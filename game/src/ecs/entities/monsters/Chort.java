@@ -7,10 +7,18 @@ import ecs.components.ai.AIComponent;
 import ecs.components.ai.fight.CollideAI;
 import ecs.components.ai.idle.PatrouilleWalk;
 import ecs.components.ai.transition.RangeTransition;
+import ecs.damage.Damage;
+import ecs.damage.DamageType;
+import ecs.entities.Entity;
+import ecs.entities.Hero;
 import graphic.Animation;
+import starter.Game;
+
+import java.util.logging.Logger;
 
 
 public class Chort extends BasicMonster {
+    private static final Logger LOGGER = Logger.getLogger(Chort.class.getName());
 
     public Chort() {
         super(0.3f, 0.3f, 5, "monster/chort/idleLeft", "monster/chort/idleRight", "monster/chort/runLeft", "monster/chort/runRight");
@@ -20,6 +28,7 @@ public class Chort extends BasicMonster {
         setupAIComponent();
         setupHitboxComponent();
         setupHealthComponent((int) hp);
+
     }
 
 
@@ -39,7 +48,11 @@ public class Chort extends BasicMonster {
 
     @Override
     public void setupHitboxComponent() {
-        new HitboxComponent(this, HitboxComponent.DEFAULT_COLLIDER, HitboxComponent.DEFAULT_COLLIDER);
+        new HitboxComponent(
+            this,
+            (you, other, direction) -> attackSkill(other),
+            (you, other, direction) -> LOGGER.info("monsterCollision")
+        );
     }
 
     @Override
@@ -71,5 +84,16 @@ public class Chort extends BasicMonster {
         float transitionRange = 3.0f;
         RangeTransition rangeTransition = new RangeTransition(transitionRange);
         new AIComponent(this, collideAI, patrouilleWalk, rangeTransition);
+    }
+
+    private void attackSkill(Entity entity) {
+        LOGGER.info("Chort attack" + entity.getClass().getSimpleName());
+        Damage damage = new Damage(2, DamageType.PHYSICAL, this);
+        if (entity instanceof Hero) {
+            Game.getHero().stream()
+                .flatMap(e -> e.getComponent(HealthComponent.class).stream())
+                .map(HealthComponent.class::cast)
+                .forEach(healthComponent -> {healthComponent.receiveHit(damage);});
+        }
     }
 }

@@ -90,7 +90,7 @@ public class MeleeSkill implements ISkillFunction {
                         .ifPresent(
                             hc -> {
                                 ((HealthComponent) hc).receiveHit(projectileDamage);
-                                applyKnockback(b, entity, knockbackDistance);
+                                SkillTools.applyKnockback(b, entity, knockbackDistance);
                                 Game.removeEntity(meleeAttack);
                             });
                 }
@@ -100,35 +100,4 @@ public class MeleeSkill implements ISkillFunction {
             meleeAttack, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
     }
 
-    /**
-     * Wendet Rückstoß auf die spezifizierte Ziel-Entität basierend auf der Entfernung und Richtung vom Ziel auf die Entität an.
-     *
-     * @param target            Die Entität, auf die Rückstoß angewendet wird.
-     * @param entity            Die Entität, die den Rückstoß verursacht.
-     * @param knockbackDistance Der Abstand, um den Rückstoß anzuwenden.
-     */
-    public void applyKnockback(Entity target, Entity entity, float knockbackDistance) {
-        PositionComponent targetPositionComponent =
-            (PositionComponent) target.getComponent(PositionComponent.class)
-                .orElseThrow(
-                    () -> new MissingComponentException("PositionComponent for target"));
-        PositionComponent entityPositionComponent =
-            (PositionComponent) entity.getComponent(PositionComponent.class)
-                .orElseThrow(
-                    () -> new MissingComponentException("PositionComponent for entity"));
-
-        Point direction = Point.getUnitDirectionalVector(targetPositionComponent.getPosition(), entityPositionComponent.getPosition());
-
-        Point newPosition = new Point(
-
-            targetPositionComponent.getPosition().x + direction.x * knockbackDistance,
-            targetPositionComponent.getPosition().y + direction.y * knockbackDistance
-        );
-
-        Tile newTile = currentLevel.getTileAt(newPosition.toCoordinate());
-        if (newTile.isAccessible()) {
-            targetPositionComponent.setPosition(newPosition);
-        }
-
-    }
 }
