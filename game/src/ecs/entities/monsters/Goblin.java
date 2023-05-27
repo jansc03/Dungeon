@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
 
-public class Goblin extends BasicMonster implements IOnDeathFunction {
+public class Goblin extends BasicMonster{
     public final Logger goblinLogger = Logger.getLogger(this.getClass().getName());
 
 

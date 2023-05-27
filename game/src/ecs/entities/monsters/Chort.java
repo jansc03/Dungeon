@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 
-public class Chort extends BasicMonster {
+public class Chort extends BasicMonster{
     private static final Logger LOGGER = Logger.getLogger(Chort.class.getName());
 
     public Chort(List<ItemData> items) {
@@ -75,7 +75,7 @@ public class Chort extends BasicMonster {
         Animation dieAnimation = AnimationBuilder.buildAnimation(pathToDieAnimation);
 
         // Erstelle das HealthComponent für das Monster
-        new HealthComponent(this, maxHealthPoints, onDeathFunction, hitAnimation, dieAnimation);
+        new HealthComponent(this, maxHealthPoints, this, hitAnimation, dieAnimation);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class Chort extends BasicMonster {
             LOGGER.log(CustomLogLevel.INFO,"item: "+i.getItemType()+i.getItemName()+"has been added to inventory of"+this.getClass().getName());
         }
     }
-
+    @Override
     public void onDeath(Entity entity) {
         dropItems(entity);
         LOGGER.log(CustomLogLevel.INFO,"Chort has dropped Items");

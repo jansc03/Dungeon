@@ -1,9 +1,10 @@
 package ecs.entities.monsters;
 
+import ecs.components.IOnDeathFunction;
 import ecs.entities.Entity;
 
 
-public abstract class BasicMonster extends Entity {
+public abstract class BasicMonster extends Entity implements IOnDeathFunction {
     /**
      * Die horizontale Bewegungsgeschwindigkeit des Monsters.
      */

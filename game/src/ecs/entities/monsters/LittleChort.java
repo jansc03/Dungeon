@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.IntStream;
 
-public class LittleChort extends BasicMonster implements IOnDeathFunction {
+public class LittleChort extends BasicMonster{
     private final Logger littleChortLogger = Logger.getLogger(this.getClass().getName());
     public LittleChort(List<ItemData> items) {
         super(0.3f, 0.3f, 5, "monster/imp/idleLeft", "monster/imp/idleRight", "monster/imp/runLeft", "monster/imp/runRight");

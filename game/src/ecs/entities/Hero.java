@@ -52,6 +52,11 @@ public class Hero extends Entity {
         pc.setSkillSlot1(boomerangSkill);
         pc.setSkillSlot2(blueFireBallSkill);
         setupHealthComponent(5);
+        setInventoryComponent();
+    }
+
+    private void setInventoryComponent() {
+        new InventoryComponent(this,20);
     }
 
     private void setupVelocityComponent() {

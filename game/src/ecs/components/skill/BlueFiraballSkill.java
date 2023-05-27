@@ -9,7 +9,7 @@ public class BlueFiraballSkill extends FallsdownProjectileSkill {
         super(
             "skills/bluefireball/bluefireBall_Down",
             0.3f,
-            new Damage(0, DamageType.FIRE, null),
+            new Damage(5, DamageType.FIRE, null),
             new Point(1, 1),
             targetSelection,
             5f,0.3f);
