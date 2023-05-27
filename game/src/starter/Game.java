@@ -18,6 +18,7 @@ import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
 import ecs.entities.Hero;
+import ecs.entities.MonsterChest.MonsterChest;
 import ecs.entities.Teleportsystem;
 import ecs.entities.monsters.Chort;
 import ecs.entities.monsters.Goblin;
@@ -181,6 +182,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         entities.clear();
         getHero().ifPresent(this::placeOnLevelStart);
         teleportsystem.makePads();                       // bei jeden neuen level aufrufen der Methode//
+        new MonsterChest(GeneralGenerator.getInstance().getStrongMonsterItems(5));
 
 
         // Erstellen und platzieren Sie eine zufällige Anzahl von Monstern basierend auf der aktuellen Tiefe

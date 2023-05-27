@@ -1,5 +1,6 @@
 package ecs.entities;
 
+import ecs.GeneralGenerator;
 import ecs.components.*;
 import ecs.items.ItemData;
 import ecs.items.ItemDataGenerator;
@@ -80,11 +81,7 @@ public class Chest extends Entity {
         IntStream.range(0, itemData.size())
                 .forEach(
                         index ->
-                                itemData.get(index)
-                                        .triggerDrop(
-                                                entity,
-                                                calculateDropPosition(
-                                                        positionComponent, index / count)));
+                            GeneralGenerator.getInstance().dropItems(itemData.get(index),calculateDropPosition(positionComponent, index / count)));
         entity.getComponent(AnimationComponent.class)
                 .map(AnimationComponent.class::cast)
                 .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
