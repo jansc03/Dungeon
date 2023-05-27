@@ -12,10 +12,8 @@ import ecs.items.BagPack;
 import ecs.items.ItemData;
 import ecs.items.ItemType;
 import ecs.tools.interaction.InteractionTool;
-import starter.Game;
-
 import java.util.List;
-import java.util.stream.Stream;
+import starter.Game;
 
 /** Used to control the player */
 public class PlayerSystem extends ECS_System {
@@ -42,22 +40,21 @@ public class PlayerSystem extends ECS_System {
 
         if (Gdx.input.isKeyPressed(KeyboardConfig.INTERACT_WORLD.get()))
             InteractionTool.interactWithClosestInteractable(ksd.e);
-        if (Gdx.input.isKeyPressed(KeyboardConfig.INVENTORY_OPEN.get()))
-            showInv();
+        if (Gdx.input.isKeyPressed(KeyboardConfig.INVENTORY_OPEN.get())) showInv();
 
         // check skills
         else if (Gdx.input.isKeyPressed(KeyboardConfig.FIRST_SKILL.get()))
             ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
         else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))
             ksd.pc.getSkillSlot2().ifPresent(skill -> skill.execute(ksd.e));
-        //use Items
-        else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_MAGICBOOK.get())){
+        // use Items
+        else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_MAGICBOOK.get())) {
             useMagicBook();
-        }else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_FLEISCH.get())){
+        } else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_FLEISCH.get())) {
             useFood();
-        }else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_POTION.get())){
+        } else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_POTION.get())) {
             usePotion();
-        }else if (Gdx.input.isKeyPressed(KeyboardConfig.ADD_TO_BACk.get())){
+        } else if (Gdx.input.isKeyPressed(KeyboardConfig.ADD_TO_BACk.get())) {
             addToBack();
         }
     }
@@ -73,65 +70,61 @@ public class PlayerSystem extends ECS_System {
         return new KSData(e, pc, vc);
     }
 
-    /**
-     * shows The inventory in the console
-     */
-
-    public void showInv(){
-        InventoryComponent invCom = (InventoryComponent)Game.getHero().get().getComponent(InventoryComponent.class).get();
+    /** shows The inventory in the console */
+    public void showInv() {
+        InventoryComponent invCom =
+                (InventoryComponent)
+                        Game.getHero().get().getComponent(InventoryComponent.class).get();
         List<ItemData> inv = invCom.getItems();
         System.out.println("Inventar:");
-        int counter=1;
-        for(ItemData i:inv){
-            System.out.println(counter+": "+i.getItemName()+"    ("+i.getItemType()+")");
+        int counter = 1;
+        for (ItemData i : inv) {
+            System.out.println(counter + ": " + i.getItemName() + "    (" + i.getItemType() + ")");
             counter++;
         }
     }
 
-    /**
-     * uses Available Magicbook in the Inventory
-     */
-    public void useMagicBook(){
+    /** uses Available Magicbook in the Inventory */
+    public void useMagicBook() {
         Hero hero = (Hero) Game.getHero().get();
-        InventoryComponent inv = (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
+        InventoryComponent inv =
+                (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
         List<ItemData> items = inv.getItems();
-        boolean done=false;
-        for(ItemData i:items){  //search for Book item
-            if(i.getItemType()==ItemType.Book&&!done){    //item found
-                i.triggerUse(hero);                       //use that item
-                done=true;
+        boolean done = false;
+        for (ItemData i : items) { // search for Book item
+            if (i.getItemType() == ItemType.Book && !done) { // item found
+                i.triggerUse(hero); // use that item
+                done = true;
             }
         }
     }
 
-    /**
-     * uses available Potion in the Inventory
-     */
-    public void usePotion(){
+    /** uses available Potion in the Inventory */
+    public void usePotion() {
         Hero hero = (Hero) Game.getHero().get();
-        InventoryComponent inv = (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
+        InventoryComponent inv =
+                (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
         List<ItemData> items = inv.getItems();
-        boolean done=false;
-        for(ItemData i:items){        //search for Potion item
-            if(i.getItemType()==ItemType.Potion&&!done){   //item found
-                i.triggerUse(hero);                //use
-                done=true;
+        boolean done = false;
+        for (ItemData i : items) { // search for Potion item
+            if (i.getItemType() == ItemType.Potion && !done) { // item found
+                i.triggerUse(hero); // use
+                done = true;
             }
         }
     }
 
-    /**
-     * uses available Food in the Inventory
-     */
-    public void useFood(){
+    /** uses available Food in the Inventory */
+    public void useFood() {
         Hero hero = (Hero) Game.getHero().get();
-        InventoryComponent inv = (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
+        InventoryComponent inv =
+                (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
         List<ItemData> items = inv.getItems();
-        boolean done=false;
-        for(ItemData i:items){         //search for food item
-            if(i.getItemType()==ItemType.Food&&!done){    // first food item found
-                i.triggerUse(hero);                       //use it
-                done=true;
+        boolean done = false;
+        for (ItemData i : items) { // search for food item
+            if (i.getItemType() == ItemType.Food && !done) { // first food item found
+                i.triggerUse(hero); // use it
+                done = true;
             }
         }
     }
@@ -140,20 +133,19 @@ public class PlayerSystem extends ECS_System {
         return new MissingComponentException("VelocityComponent");
     }
 
-    /**
-     * searches the inventory for bag packs and tries to add a item to it
-     */
+    /** searches the inventory for bag packs and tries to add a item to it */
     public void addToBack() {
         Hero hero = (Hero) Game.getHero().get();
-        InventoryComponent inv = (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
+        InventoryComponent inv =
+                (InventoryComponent) hero.getComponent(InventoryComponent.class).get();
         List<ItemData> items = inv.getItems();
         boolean done = false;
-        for (ItemData b : items) {    // searching for bag
-            if (b.getItemType() == ItemType.Bag && !done) {  // searching for bag
-                for (ItemData i : items) {           // searching for item
-                    if (i.getItemType() != ItemType.Bag && !done) {    // searching for item
+        for (ItemData b : items) { // searching for bag
+            if (b.getItemType() == ItemType.Bag && !done) { // searching for bag
+                for (ItemData i : items) { // searching for item
+                    if (i.getItemType() != ItemType.Bag && !done) { // searching for item
                         done = ((BagPack) b).addItem(i);
-                        inv.removeItem(i);
+                        if(done){inv.removeItem(i);}
                     }
                 }
             }
