@@ -110,6 +110,7 @@ public class Chort extends BasicMonster {
             LOGGER.log(CustomLogLevel.INFO,"item: "+i.getItemType()+i.getItemName()+"has been added to inventory of"+this.getClass().getName());
         }
     }
+
     public void onDeath(Entity entity) {
         dropItems(entity);
         LOGGER.log(CustomLogLevel.INFO,"Chort has dropped Items");
