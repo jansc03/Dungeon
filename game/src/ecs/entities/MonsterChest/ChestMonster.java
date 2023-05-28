@@ -17,18 +17,16 @@ import graphic.Animation;
 import logging.CustomLogLevel;
 import starter.Game;
 import tools.Point;
-
-import javax.swing.text.Position;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class ChestMonster extends BasicMonster {
     int damage=0;
-    public static String ani = "objects.treasurechest";
+    public static String ani = "character/monster/monsterChest";
     private static final Logger LOGGER = Logger.getLogger(Chort.class.getName());
 
     public ChestMonster(List<ItemData> items, Point p) {
-        super(0.3f, 0.3f, 10, ani, ani, ani, ani);
+        super(0.3f, 0.3f, 20, ani, ani, ani, ani);
         new PositionComponent(this,p);
         setupVelocityComponent();
         setupAnimationComponent();
@@ -36,7 +34,6 @@ public class ChestMonster extends BasicMonster {
         setupHitboxComponent();
         setupHealthComponent((int) hp);
         setupInventory(items);
-
     }
 
 

@@ -17,7 +17,7 @@ public class Tombstone extends Entity {
     /**
      * Der Dateipfad zur Bilddatei des Grabsteins.
      */
-    private final String pathToTombstone = "objects/treasurechest/Object/Tombstone.png";
+    private final String pathToTombstone = "Object/Tombstone.png";
     Ghost ghost = new Ghost();
 
     /**
