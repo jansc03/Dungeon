@@ -21,6 +21,7 @@ public class Hero extends Entity {
     private final int attackCoolDown = 0;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
+    private int damage= 2;
 
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";
@@ -29,7 +30,6 @@ public class Hero extends Entity {
     private Skill firstSkill;
     private Skill secondSkill;
     private Skill boomerangSkill;
-
     private Skill blueFireBallSkill;
 
     /** Entity with Components */
@@ -108,5 +108,12 @@ public class Hero extends Entity {
 
         // Erstelle das HealthComponent für das Monster
         new HealthComponent(this, maxHealthPoints, onDeathFunction, hitAnimation, dieAnimation);
+    }
+
+    public int getDamage(){
+        return damage;
+    }
+    public void setDamge(int d){
+        damage=d;
     }
 }
