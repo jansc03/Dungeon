@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class ChestMonster extends BasicMonster {
     int damage=0;
     public static String ani = "character/monster/monsterChest";
-    private static final Logger LOGGER = Logger.getLogger(Chort.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(ChestMonster.class.getName());
 
     public ChestMonster(List<ItemData> items, Point p) {
         super(0.3f, 0.3f, 20, ani, ani, ani, ani);
@@ -64,7 +64,7 @@ public class ChestMonster extends BasicMonster {
     public void setupHealthComponent(int maxHealthPoints) {
         IOnDeathFunction onDeathFunction = entity -> {
             // Logik für das, was passieren soll, wenn das Monster stirbt
-            System.out.println("Das Monster ist gestorben!");
+            System.out.println("Das ChestMonster ist gestorben!");
         };
 
         // Animationen für das Monster, wenn es Schaden erleidet oder stirbt
@@ -92,7 +92,7 @@ public class ChestMonster extends BasicMonster {
     }
 
     private void attackSkill(Entity entity) {
-        LOGGER.info("Chort attack" + entity.getClass().getSimpleName());
+        LOGGER.info("ChestMonster attack" + entity.getClass().getSimpleName());
         Damage damage = new Damage(this.damage, DamageType.PHYSICAL, this);
         if (entity instanceof Hero) {
             Game.getHero().stream()
@@ -112,30 +112,30 @@ public class ChestMonster extends BasicMonster {
     @Override
     public void onDeath(Entity entity) {
         spawnChest(entity);
-        LOGGER.log(CustomLogLevel.INFO,"Chort has dropped Items");
+        LOGGER.log(CustomLogLevel.INFO,this.getClass().getSimpleName()+" has dropped Items");
     }
 
     /**
-     * method to drop Items when entity dies(the default iOnDrop had some issues that we could not figure out)
+     * creates a Chest wich the Player can Loot at the position the Monster dies and with the Inventory of the Monster
      * @param entity
      */
     private void spawnChest(Entity entity) {
-        InventoryComponent inventoryComponent =
+        InventoryComponent inventoryComponent =         //items to spawn Chest with (inventory of the Monster)
             entity.getComponent(InventoryComponent.class)
                 .map(InventoryComponent.class::cast)
                 .orElseThrow(
                     () ->
                         createMissingComponentException(
                             InventoryComponent.class.getName(), entity));
-        PositionComponent positionComponent =
+        PositionComponent positionComponent =           //pos to spawn Chest(pos Monster died)
             entity.getComponent(PositionComponent.class)
                 .map(PositionComponent.class::cast)
                 .orElseThrow(
                     () ->
                         createMissingComponentException(
                             PositionComponent.class.getName(), entity));
-        new Chest(inventoryComponent.getItems(),positionComponent.getPosition());
-        Game.getEntitiesToRemove().add(this);
+        new Chest(inventoryComponent.getItems(),positionComponent.getPosition());  //creating LootChest
+        Game.getEntitiesToRemove().add(this);                                      //deleting Monster
     }
     private static MissingComponentException createMissingComponentException(
         String Component, Entity e) {
