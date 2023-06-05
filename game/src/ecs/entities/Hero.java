@@ -6,22 +6,28 @@ import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
+import ecs.components.xp.ILevelUp;
+import ecs.components.xp.XPComponent;
 import graphic.Animation;
+import starter.Game;
+
 import java.util.logging.Logger;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
  * all its components and attributes .
  */
-public class Hero extends Entity {
+public class Hero extends Entity implements ILevelUp {
 
     private static final Logger LOGGER = Logger.getLogger(Hero.class.getName());
 
     private final int fireballCoolDown = 1;
     private final int attackCoolDown = 0;
+    private final int healCooldown = 5;
+    private final int rageCooldown = 10;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
-    private int damage= 2;
+    private float damage= 2;
 
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";
@@ -31,11 +37,15 @@ public class Hero extends Entity {
     private Skill secondSkill;
     private Skill boomerangSkill;
     private Skill blueFireBallSkill;
+    private Skill healSkill;
+    private Skill rageSkill;
 
     /** Entity with Components */
     public Hero() {
         super();
         new PositionComponent(this);
+        new XPComponent(this, this);
+        new SkillComponent(this);
         setupVelocityComponent();
         setupAnimationComponent();
         setupHitboxComponent();
@@ -46,7 +56,7 @@ public class Hero extends Entity {
         setupBlueFireBallSkill();
         pc.setSkillSlot1(boomerangSkill);
         pc.setSkillSlot2(blueFireBallSkill);
-        setupHealthComponent(5);
+        setupHealthComponent(20);
         setInventoryComponent();
     }
 
@@ -111,9 +121,43 @@ public class Hero extends Entity {
     }
 
     public int getDamage(){
-        return damage;
+        return (int)damage;
     }
-    public void setDamge(int d){
+    public void setDamage(int d){
         damage=d;
+    }
+
+    @Override
+    public void onLevelUp(long level) {
+        if(level == 1){            //unlock Skill
+            setupHealSkill();
+            this.getComponent(PlayableComponent.class).ifPresent(p ->((PlayableComponent)p).setSkillSlot1(healSkill));
+        }
+        if(level == 2){
+            setupRageSkill();
+            this.getComponent(PlayableComponent.class).ifPresent(p ->((PlayableComponent)p).setSkillSlot2(rageSkill));
+        }
+        Hero hero = (Hero) Game.getHero().get(); //increase HP
+        hero.getComponent(HealthComponent.class).ifPresent(h ->((HealthComponent)h)
+                                                          .setMaximalHealthpoints(((HealthComponent)h)
+                                                              .getMaximalHealthpoints()+5));
+        damage = (float) (damage* 0.1);          //increase damage
+    }
+
+    /**
+     * erstellt rage Skill für spätere nutzung
+     */
+
+    private void setupRageSkill() {
+        rageSkill = new Skill(new Rage(),rageCooldown);
+        this.getComponent(SkillComponent.class).ifPresent(s->((SkillComponent)s).addSkill(rageSkill));
+    }
+    /**
+     * erstellt heal Skill für spätere nutzung
+     */
+
+    private void setupHealSkill() {
+        healSkill = new Skill(new Heal(),healCooldown );
+        this.getComponent(SkillComponent.class).ifPresent(s->((SkillComponent)s).addSkill(healSkill));
     }
 }

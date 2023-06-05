@@ -32,7 +32,7 @@ public class Rage extends MagicSkill{
                 vCp.setXVelocity(vCp.getXVelocity()*1.25f);
                 vCp.setYVelocity(vCp.getYVelocity()*1.25f);
                 int ogDamage = hero.getDamage();
-                hero.setDamge(ogDamage*2);
+                hero.setDamage(ogDamage*2);
                 durationTimer(vCp,ogX,ogY, hero, ogDamage);
                 LOGGER.log(CustomLogLevel.INFO,this.getClass().getSimpleName()+"Hero Damage and Velocity Increased");
             }
@@ -54,7 +54,7 @@ public class Rage extends MagicSkill{
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             public void run() {
-                hero.setDamge(ogDamage);
+                hero.setDamage(ogDamage);
                 velocityComponent.setXVelocity(ogX);
                 velocityComponent.setYVelocity(ogY);
             }
