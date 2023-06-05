@@ -1,10 +1,9 @@
 package ecs.items;
 
+import graphic.Animation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
-import graphic.Animation;
 import logging.CustomLogLevel;
 
 public class BagPack extends ItemData {
@@ -12,12 +11,14 @@ public class BagPack extends ItemData {
     private final Logger backpackLogger = Logger.getLogger(this.getClass().getName());
     List<ItemData> inv = new ArrayList<>();
     int leanght = 10;
-    public BagPack(ItemType itemType,
-                   Animation inventoryTexture,
-                   Animation worldTexture,
-                   String itemName,
-                   String description){
-        super(itemType,inventoryTexture,worldTexture,itemName,description);
+
+    public BagPack(
+            ItemType itemType,
+            Animation inventoryTexture,
+            Animation worldTexture,
+            String itemName,
+            String description) {
+        super(itemType, inventoryTexture, worldTexture, itemName, description);
     }
 
     /**

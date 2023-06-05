@@ -34,7 +34,7 @@ public class Chest extends Entity {
         ItemDataGenerator itemDataGenerator = new ItemDataGenerator();
 
         List<ItemData> itemData =
-                IntStream.range(0, random.nextInt(1,3))
+                IntStream.range(0, random.nextInt(1, 3))
                         .mapToObj(i -> itemDataGenerator.generateItemData())
                         .toList();
         return new Chest(
@@ -81,7 +81,11 @@ public class Chest extends Entity {
         IntStream.range(0, itemData.size())
                 .forEach(
                         index ->
-                            GeneralGenerator.getInstance().dropItems(itemData.get(index),calculateDropPosition(positionComponent, index / count)));
+                                GeneralGenerator.getInstance()
+                                        .dropItems(
+                                                itemData.get(index),
+                                                calculateDropPosition(
+                                                        positionComponent, index / count)));
         entity.getComponent(AnimationComponent.class)
                 .map(AnimationComponent.class::cast)
                 .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));

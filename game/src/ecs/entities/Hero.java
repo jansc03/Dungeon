@@ -7,7 +7,6 @@ import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
 import graphic.Animation;
-
 import java.util.logging.Logger;
 
 /**
@@ -15,7 +14,6 @@ import java.util.logging.Logger;
  * all its components and attributes .
  */
 public class Hero extends Entity {
-
 
     private static final Logger LOGGER = Logger.getLogger(Hero.class.getName());
 
@@ -34,10 +32,7 @@ public class Hero extends Entity {
 
     private Skill blueFireBallSkill;
 
-
-    /**
-     * Entity with Components
-     */
+    /** Entity with Components */
     public Hero() {
         super();
         new PositionComponent(this);
@@ -56,7 +51,7 @@ public class Hero extends Entity {
     }
 
     private void setInventoryComponent() {
-        new InventoryComponent(this,20);
+        new InventoryComponent(this, 20);
     }
 
     private void setupVelocityComponent() {
@@ -73,41 +68,37 @@ public class Hero extends Entity {
 
     private void setupFireballSkill() {
         firstSkill =
-            new Skill(
-                new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+                new Skill(
+                        new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
     }
 
     private void setupSwordSkill() {
         secondSkill =
-            new Skill(
-                new SwordSkill(SkillTools::getCursorPositionAsPoint), attackCoolDown);
+                new Skill(new SwordSkill(SkillTools::getCursorPositionAsPoint), attackCoolDown);
     }
 
-
     private void setupBoomerangSkill() {
-        boomerangSkill =
-            new Skill(
-                new BoomerangSkill(SkillTools::getCursorPositionAsPoint), 0);
+        boomerangSkill = new Skill(new BoomerangSkill(SkillTools::getCursorPositionAsPoint), 0);
     }
 
     private void setupBlueFireBallSkill() {
         blueFireBallSkill =
-            new Skill(
-                new BlueFiraballSkill(SkillTools::getCursorPositionAsPoint), 0);
+                new Skill(new BlueFiraballSkill(SkillTools::getCursorPositionAsPoint), 0);
     }
 
     private void setupHitboxComponent() {
         new HitboxComponent(
-            this,
-            (you, other, direction) -> LOGGER.info("heroCollisionEnter"),
-            (you, other, direction) -> LOGGER.info("heroCollisionEnter"));
+                this,
+                (you, other, direction) -> LOGGER.info("heroCollisionEnter"),
+                (you, other, direction) -> LOGGER.info("heroCollisionEnter"));
     }
 
     public void setupHealthComponent(int maxHealthPoints) {
-        IOnDeathFunction onDeathFunction = entity -> {
-            // Logik für das, was passieren soll, wenn das Monster stirbt
-            LOGGER.info("Der Held ist gestorben");
-        };
+        IOnDeathFunction onDeathFunction =
+                entity -> {
+                    // Logik für das, was passieren soll, wenn das Monster stirbt
+                    LOGGER.info("Der Held ist gestorben");
+                };
 
         // Animationen für das Monster, wenn es Schaden erleidet oder stirbt
         String pathToHitAnimation = "character/knight/hit";

@@ -32,7 +32,7 @@ public class ItemDataGenerator {
                             new Animation(missingTexture, 1),
                             "Namensschild",
                             "Ein Namensschild wo der Name nicht mehr lesbar ist.."),
-                    new ItemData(                                    //the new Item data templates
+                    new ItemData( // the new Item data templates
                             ItemType.Book,
                             new Animation(bookTexture, 1),
                             new Animation(bookTexture, 1),
@@ -55,8 +55,7 @@ public class ItemDataGenerator {
                             new Animation(DEFAULT_BAGPACK, 1),
                             new Animation(DEFAULT_BAGPACK, 1),
                             "Rucksack",
-                            "Kann Items Enthalten"
-                            ));
+                            "Kann Items Enthalten"));
 
     private Random rand = new Random();
 
@@ -69,6 +68,7 @@ public class ItemDataGenerator {
 
     /**
      * returnes a specific Item not a random one
+     *
      * @param ItemIndex
      * @return
      */

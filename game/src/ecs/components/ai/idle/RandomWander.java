@@ -13,8 +13,8 @@ public class RandomWander implements IIdleAI {
     private int currentBreak = 0;
 
     /**
-     * Finds a point in the radius and moves there. When the point has been reached, a new
-     * point in the radius is searched for from the current position.
+     * Finds a point in the radius and moves there. When the point has been reached, a new point in
+     * the radius is searched for from the current position.
      *
      * @param radius Radius in which a target point is to be searched for
      * @param breakTimeInSeconds How long to wait (in seconds) before searching for a new goal

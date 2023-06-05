@@ -1,23 +1,21 @@
 package ecs.components.skill;
 
+import static starter.Game.currentLevel;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
 import ecs.entities.Entity;
+import java.util.logging.Logger;
 import level.elements.tile.Tile;
 import starter.Game;
 import tools.Point;
 
-import java.util.logging.Logger;
-
-import static starter.Game.currentLevel;
-
 public class SkillTools {
 
     private static final Logger LOGGER = Logger.getLogger(SkillTools.class.getName());
-
 
     /**
      * calculates the last position in range regardless of aimed position
@@ -71,31 +69,40 @@ public class SkillTools {
         return new Point(mousePosition.x, mousePosition.y);
     }
 
-
     /**
-     * Wendet Rückstoß auf die spezifizierte Ziel-Entität basierend auf der Entfernung und Richtung vom Ziel auf die Entität an.
+     * Wendet Rückstoß auf die spezifizierte Ziel-Entität basierend auf der Entfernung und Richtung
+     * vom Ziel auf die Entität an.
      *
-     * @param target            Die Entität, auf die Rückstoß angewendet wird.
-     * @param entity            Die Entität, die den Rückstoß verursacht.
+     * @param target Die Entität, auf die Rückstoß angewendet wird.
+     * @param entity Die Entität, die den Rückstoß verursacht.
      * @param knockbackDistance Der Abstand, um den Rückstoß anzuwenden.
      */
     public static void applyKnockback(Entity target, Entity entity, float knockbackDistance) {
         PositionComponent targetPositionComponent =
-            (PositionComponent) target.getComponent(PositionComponent.class)
-                .orElseThrow(
-                    () -> new MissingComponentException("PositionComponent for target"));
+                (PositionComponent)
+                        target.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () ->
+                                                new MissingComponentException(
+                                                        "PositionComponent for target"));
 
         PositionComponent entityPositionComponent =
-            (PositionComponent) entity.getComponent(PositionComponent.class)
-                .orElseThrow(
-                    () -> new MissingComponentException("PositionComponent for entity"));
+                (PositionComponent)
+                        entity.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () ->
+                                                new MissingComponentException(
+                                                        "PositionComponent for entity"));
 
-        Point direction = Point.getUnitDirectionalVector(targetPositionComponent.getPosition(), entityPositionComponent.getPosition());
+        Point direction =
+                Point.getUnitDirectionalVector(
+                        targetPositionComponent.getPosition(),
+                        entityPositionComponent.getPosition());
 
-        Point newPosition = new Point(
-            targetPositionComponent.getPosition().x + direction.x * knockbackDistance,
-            targetPositionComponent.getPosition().y + direction.y * knockbackDistance
-        );
+        Point newPosition =
+                new Point(
+                        targetPositionComponent.getPosition().x + direction.x * knockbackDistance,
+                        targetPositionComponent.getPosition().y + direction.y * knockbackDistance);
 
         Tile newTile = currentLevel.getTileAt(newPosition.toCoordinate());
 
@@ -103,8 +110,8 @@ public class SkillTools {
             targetPositionComponent.setPosition(newPosition);
             LOGGER.info("Applied knockback to target entity: " + target.getClass().getSimpleName());
         } else {
-            LOGGER.warning("Knockback blocked. Target entity: " + target.getClass().getSimpleName());
+            LOGGER.warning(
+                    "Knockback blocked. Target entity: " + target.getClass().getSimpleName());
         }
-
     }
 }

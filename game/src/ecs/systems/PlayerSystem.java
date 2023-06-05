@@ -145,7 +145,9 @@ public class PlayerSystem extends ECS_System {
                 for (ItemData i : items) { // searching for item
                     if (i.getItemType() != ItemType.Bag && !done) { // searching for item
                         done = ((BagPack) b).addItem(i);
-                        if(done){inv.removeItem(i);}
+                        if (done) {
+                            inv.removeItem(i);
+                        }
                     }
                 }
             }

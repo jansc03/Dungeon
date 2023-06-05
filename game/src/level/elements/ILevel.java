@@ -1,10 +1,9 @@
 package level.elements;
 
+import ecs.entities.Entity;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import ecs.entities.Entity;
 import level.elements.tile.*;
 import level.tools.LevelElement;
 import level.tools.TileTextureFactory;
@@ -15,6 +14,7 @@ public interface ILevel extends ITileable {
     default void setRandomStart() {
         setStartTile(getRandomTile(LevelElement.FLOOR));
     }
+
     static final Set<Entity> entities = new HashSet<>();
 
     /**
@@ -36,7 +36,6 @@ public interface ILevel extends ITileable {
         changeTileElementType(
                 floorTiles.get(index < startTileIndex ? index : index + 1), LevelElement.EXIT);
     }
-
 
     /**
      * Add floor tile to level.
@@ -207,7 +206,6 @@ public interface ILevel extends ITileable {
                     : null;
         };
     }
-
 
     /**
      * @return random floor tile

@@ -2,6 +2,7 @@ package SafeandLoad;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 public class DataStorage implements Serializable {
     private int levelCount;
 
@@ -43,5 +44,3 @@ public class DataStorage implements Serializable {
         return entities;
     }
 }
-
-

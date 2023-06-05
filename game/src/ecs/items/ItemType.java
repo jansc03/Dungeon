@@ -8,5 +8,4 @@ public enum ItemType {
     Book,
     Food,
     Potion
-
 }
