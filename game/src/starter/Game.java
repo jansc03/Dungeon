@@ -171,6 +171,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         currentDepth++;
         GeneralGenerator.getInstance().createMagicBook();
         GeneralGenerator.getInstance().makeBagPack();
+        ((Hero) Game.getHero().get()).levelUp();
     }
 
     private int calculateNumberOfMonsters() {

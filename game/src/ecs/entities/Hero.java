@@ -9,9 +9,9 @@ import ecs.components.skill.*;
 import ecs.components.xp.ILevelUp;
 import ecs.components.xp.XPComponent;
 import graphic.Animation;
-import starter.Game;
-
 import java.util.logging.Logger;
+import logging.CustomLogLevel;
+import starter.Game;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
@@ -27,7 +27,7 @@ public class Hero extends Entity implements ILevelUp {
     private final int rageCooldown = 10;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
-    private float damage= 2;
+    private float damage = 1;
 
     private final String pathToIdleLeft = "knight/idleLeft";
     private final String pathToIdleRight = "knight/idleRight";
@@ -120,44 +120,56 @@ public class Hero extends Entity implements ILevelUp {
         new HealthComponent(this, maxHealthPoints, onDeathFunction, hitAnimation, dieAnimation);
     }
 
-    public int getDamage(){
-        return (int)damage;
+    public int getDamage() {
+        return (int) damage;
     }
-    public void setDamage(int d){
-        damage=d;
+
+    public void setDamage(int d) {
+        damage = d;
     }
 
     @Override
     public void onLevelUp(long level) {
-        if(level == 1){            //unlock Skill
+        if (level == 1) { // unlock Skill
             setupHealSkill();
-            this.getComponent(PlayableComponent.class).ifPresent(p ->((PlayableComponent)p).setSkillSlot1(healSkill));
+            this.getComponent(PlayableComponent.class)
+                    .ifPresent(p -> ((PlayableComponent) p).setSkillSlot3(healSkill));
         }
-        if(level == 2){
+        if (level == 2) {
             setupRageSkill();
-            this.getComponent(PlayableComponent.class).ifPresent(p ->((PlayableComponent)p).setSkillSlot2(rageSkill));
+            this.getComponent(PlayableComponent.class)
+                    .ifPresent(p -> ((PlayableComponent) p).setSkillSlot4(rageSkill));
         }
-        Hero hero = (Hero) Game.getHero().get(); //increase HP
-        hero.getComponent(HealthComponent.class).ifPresent(h ->((HealthComponent)h)
-                                                          .setMaximalHealthpoints(((HealthComponent)h)
-                                                              .getMaximalHealthpoints()+5));
-        damage = (float) (damage* 0.1);          //increase damage
+        Hero hero = (Hero) Game.getHero().get(); // increase HP
+        hero.getComponent(HealthComponent.class)
+                .ifPresent(
+                        h ->
+                                ((HealthComponent) h)
+                                        .setMaximalHealthpoints(
+                                                ((HealthComponent) h).getMaximalHealthpoints()
+                                                        + 5));
+        damage = (float) (damage * 0.1); // increase damage
     }
 
-    /**
-     * erstellt rage Skill für spätere nutzung
-     */
-
+    /** erstellt rage Skill für spätere nutzung */
     private void setupRageSkill() {
-        rageSkill = new Skill(new Rage(),rageCooldown);
-        this.getComponent(SkillComponent.class).ifPresent(s->((SkillComponent)s).addSkill(rageSkill));
+        rageSkill = new Skill(new Rage(), rageCooldown);
+        this.getComponent(SkillComponent.class)
+                .ifPresent(s -> ((SkillComponent) s).addSkill(rageSkill));
+        LOGGER.log(CustomLogLevel.INFO, "RageSkill setup");
+        System.out.println("setup the skill");
     }
-    /**
-     * erstellt heal Skill für spätere nutzung
-     */
-
+    /** erstellt heal Skill für spätere nutzung */
     private void setupHealSkill() {
-        healSkill = new Skill(new Heal(),healCooldown );
-        this.getComponent(SkillComponent.class).ifPresent(s->((SkillComponent)s).addSkill(healSkill));
+        healSkill = new Skill(new Heal(), healCooldown);
+        this.getComponent(SkillComponent.class)
+                .ifPresent(s -> ((SkillComponent) s).addSkill(healSkill));
+        LOGGER.log(CustomLogLevel.INFO, "HealSkill setup");
+    }
+
+    public void levelUp() {
+        XPComponent xpC = (XPComponent) this.getComponent(XPComponent.class).get();
+        xpC.addXP(xpC.getXPToNextLevel());
+        LOGGER.log(CustomLogLevel.INFO, "level Up");
     }
 }

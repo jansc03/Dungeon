@@ -47,6 +47,10 @@ public class PlayerSystem extends ECS_System {
             ksd.pc.getSkillSlot1().ifPresent(skill -> skill.execute(ksd.e));
         else if (Gdx.input.isKeyPressed(KeyboardConfig.SECOND_SKILL.get()))
             ksd.pc.getSkillSlot2().ifPresent(skill -> skill.execute(ksd.e));
+        else if (Gdx.input.isKeyPressed(KeyboardConfig.THIRD_SKILL.get())) // t
+        ksd.pc.getSkillSlot3().ifPresent(skill -> skill.execute(ksd.e));
+        else if (Gdx.input.isKeyPressed(KeyboardConfig.FOURTH_SKILL.get())) // z
+        ksd.pc.getSkillSlot4().ifPresent(skill -> skill.execute(ksd.e));
         // use Items
         else if (Gdx.input.isKeyPressed(KeyboardConfig.USE_MAGICBOOK.get())) {
             useMagicBook();
