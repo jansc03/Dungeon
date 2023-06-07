@@ -23,7 +23,7 @@ public class Rage extends MagicSkill {
                         (HealthComponent) entity.getComponent(HealthComponent.class).get();
                 int hpCost = (int) (hCp.getMaximalHealthpoints() * 0.3);
                 int newHP = hCp.getCurrentHealthpoints() - hpCost;
-                if(newHP<1)newHP=1;
+                if (newHP < 1) newHP = 1;
                 hCp.setCurrentHealthpoints(newHP);
                 LOGGER.log(
                         CustomLogLevel.INFO, this.getClass().getSimpleName() + "Hero Hp decreased");
@@ -65,7 +65,9 @@ public class Rage extends MagicSkill {
                         hero.setDamage(ogDamage);
                         velocityComponent.setXVelocity(ogX);
                         velocityComponent.setYVelocity(ogY);
-                        LOGGER.log(CustomLogLevel.INFO, this.getClass().getSimpleName() + " Effect Timer ended");
+                        LOGGER.log(
+                                CustomLogLevel.INFO,
+                                this.getClass().getSimpleName() + " Effect Timer ended");
                     }
                 },
                 (long) skillDuration * 1000);
