@@ -6,8 +6,6 @@ import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.ai.AIComponent;
 import ecs.components.ai.fight.CollideAI;
-import ecs.components.ai.idle.GhostIdle;
-import ecs.components.ai.idle.IIdleAI;
 import ecs.components.ai.idle.WanderingWalk;
 import ecs.components.ai.transition.RangeTransition;
 import ecs.entities.Entity;
@@ -51,7 +49,4 @@ public class Ghost extends Entity {
         RangeTransition rangeTransition = new RangeTransition(maxDistance);
         new AIComponent(this, collideAI, wanderingWalk, rangeTransition);
     }
-
-
-
 }

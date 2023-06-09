@@ -1,16 +1,13 @@
 package SafeandLoad;
 
+import ecs.GeneralGenerator;
 import ecs.entities.Entity;
-
 import ecs.entities.monsters.Chort;
 import ecs.entities.monsters.Goblin;
 import ecs.entities.monsters.LittleChort;
-import ecs.entities.nps.Ghost;
-import ecs.entities.objects.Tombstone;
-import starter.Game;
-
 import java.io.*;
 import java.util.ArrayList;
+import starter.Game;
 
 public class SafeandLoad {
     private final Game game;
@@ -24,10 +21,7 @@ public class SafeandLoad {
         this.game = game;
     }
 
-
-    /**
-     * Schreibt den aktuellen Spielstand in eine Datei.
-     */
+    /** Schreibt den aktuellen Spielstand in eine Datei. */
     public void writeSave() {
         DataStorage data = new DataStorage();
 
@@ -52,9 +46,7 @@ public class SafeandLoad {
         }
     }
 
-    /**
-     * Lädt den Spielstand aus einer Datei.
-     */
+    /** Lädt den Spielstand aus einer Datei. */
     public void loadSave() {
         FileInputStream fis;
         ObjectInputStream in;
@@ -76,9 +68,14 @@ public class SafeandLoad {
         // Fügt alle Entities aus dem gespeicherten Spielstand zum Spiel hinzu
         for (String entity : data.getEntities()) {
             switch (entity) {
-                case "Chort" -> Game.getEntitiesToAdd().add(new Chort());
-                case "Goblin" -> Game.getEntitiesToAdd().add(new Goblin());
-                case "LittleChort" -> Game.getEntitiesToAdd().add(new LittleChort());
+                case "Chort" -> Game.getEntitiesToAdd()
+                        .add(new Chort(GeneralGenerator.getInstance().getStrongMonsterItems(2)));
+                case "Goblin" -> Game.getEntitiesToAdd()
+                        .add(new Goblin(GeneralGenerator.getInstance().getWeakMonsterItems(2)));
+                case "LittleChort" -> Game.getEntitiesToAdd()
+                        .add(
+                                new LittleChort(
+                                        GeneralGenerator.getInstance().getWeakMonsterItems(1)));
             }
             System.out.println("geladen");
         }

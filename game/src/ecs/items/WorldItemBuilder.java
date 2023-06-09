@@ -28,4 +28,30 @@ public class WorldItemBuilder {
                 });
         return droppedItem;
     }
+
+    public static Entity buildWorldItem(ItemData itemData, boolean free) {
+        Entity droppedItem = new Entity();
+        new PositionComponent(droppedItem);
+        new AnimationComponent(droppedItem, itemData.getWorldTexture());
+        new ItemComponent(droppedItem, itemData);
+        HitboxComponent component = new HitboxComponent(droppedItem);
+        component.setiCollideEnter(
+                (a, b, direction) -> {
+                    itemData.triggerCollect(a, b);
+                });
+        return droppedItem;
+    }
+
+    public static Entity buildWorldItem(ItemData itemData, Point pos) {
+        Entity droppedItem = new Entity();
+        new PositionComponent(droppedItem, pos);
+        new AnimationComponent(droppedItem, itemData.getWorldTexture());
+        new ItemComponent(droppedItem, itemData);
+        HitboxComponent component = new HitboxComponent(droppedItem);
+        component.setiCollideEnter(
+                (a, b, direction) -> {
+                    itemData.triggerCollect(a, b);
+                });
+        return droppedItem;
+    }
 }

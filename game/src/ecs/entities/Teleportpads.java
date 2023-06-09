@@ -4,25 +4,21 @@ import ecs.components.AnimationComponent;
 import ecs.components.HitboxComponent;
 import ecs.components.collision.ICollide;
 import graphic.Animation;
-import level.elements.tile.Tile;
-
 import java.util.List;
+import level.elements.tile.Tile;
 
 public class Teleportpads extends Traps implements ICollide {
 
     private Teleportsystem mySystem;
 
-    /**Teleportpads aussehen verändern*/
-
-
+    /** Teleportpads aussehen verändern */
     public static final List<String> DEFAULT_UNUSED_ANIMATION_FRAMES =
-        List.of("dungeon/ice/floor/floor_1.png");
+            List.of("dungeon/ice/floor/floor_1.png");
 
     public static final List<String> DEFAULT_USED_ANIMATION_FRAMES =
-        List.of("dungeon/ice/floor/floor_ladder.png");
+            List.of("dungeon/ice/floor/floor_ladder.png");
 
-    /**teleportpads werden mit nutzungen und refferenz auf das Teleportsystem*/
-
+    /** teleportpads werden mit nutzungen und refferenz auf das Teleportsystem */
     public Teleportpads(int usages, Teleportsystem mySystem) {
         super();
         this.usages = usages;
@@ -31,58 +27,53 @@ public class Teleportpads extends Traps implements ICollide {
         setupAnimationComponent();
     }
 
-    /** stellt Animationen zum änddern des Aussehens der Falle*/
+    /** stellt Animationen zum änddern des Aussehens der Falle */
     private void setupAnimationComponent() {
         AnimationComponent ac =
-            new AnimationComponent(
-                this,
-                new Animation(DEFAULT_UNUSED_ANIMATION_FRAMES, 100, false),
-                new Animation(DEFAULT_USED_ANIMATION_FRAMES, 100, false));
+                new AnimationComponent(
+                        this,
+                        new Animation(DEFAULT_UNUSED_ANIMATION_FRAMES, 100, false),
+                        new Animation(DEFAULT_USED_ANIMATION_FRAMES, 100, false));
     }
 
-    /** benachrichtigt das Teleportsystem über die nutzung des Pads und ändert dann das Aussehens*/
-
+    /** benachrichtigt das Teleportsystem über die nutzung des Pads und ändert dann das Aussehens */
     public void Aniused(Entity entity) {
         mySystem.usedPad(this);
         entity.getComponent(AnimationComponent.class)
-            .map(AnimationComponent.class::cast)
-            .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
+                .map(AnimationComponent.class::cast)
+                .ifPresent(x -> x.setCurrentAnimation(x.getIdleRight()));
     }
-    /**Ändert das Aussehen der Pads zum ungenutzten*/
-
+    /** Ändert das Aussehen der Pads zum ungenutzten */
     public void Aniusable(Entity entity) {
         entity.getComponent(AnimationComponent.class)
-            .map(AnimationComponent.class::cast)
-            .ifPresent(x -> x.setCurrentAnimation(x.getIdleLeft()));
+                .map(AnimationComponent.class::cast)
+                .ifPresent(x -> x.setCurrentAnimation(x.getIdleLeft()));
     }
 
-    /** wenn der Held das Pad betritt wird die Methoden Aniused und reduceUsages*/
-
-
+    /** wenn der Held das Pad betritt wird die Methoden Aniused und reduceUsages */
     @Override
     public void onCollision(Entity a, Entity b, Tile.Direction from) {
-        if(b instanceof Hero){
+        if (b instanceof Hero) {
             Teleportpads trap = (Teleportpads) a;
             trap.Aniused(this);
             trap.reduceUsages();
         }
-
     }
 
-    /** Wenn der Held das Pad verlässt wird das Teleportsystem benachrichtigt das man sich wieder Teleportieren kann*/
-
-
+    /**
+     * Wenn der Held das Pad verlässt wird das Teleportsystem benachrichtigt das man sich wieder
+     * Teleportieren kann
+     */
     public void onCollisionleave(Entity a, Entity b, Tile.Direction from) {
         Teleportpads trap = (Teleportpads) a;
         trap.getTeleportsystem().setUsable();
-
     }
 
-    public Teleportsystem getTeleportsystem(){
+    public Teleportsystem getTeleportsystem() {
         return mySystem;
     }
 
-    public void reduceUsages(){
-        usages-=1;
+    public void reduceUsages() {
+        usages -= 1;
     }
 }

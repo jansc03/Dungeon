@@ -6,11 +6,8 @@ import ecs.components.collision.ICollide;
 import ecs.damage.Damage;
 import ecs.entities.Entity;
 import graphic.Animation;
-import level.elements.tile.Tile;
 import starter.Game;
 import tools.Point;
-
-import static starter.Game.currentLevel;
 
 public class MeleeSkill implements ISkillFunction {
 
@@ -24,27 +21,30 @@ public class MeleeSkill implements ISkillFunction {
     private ITargetSelection selectionFunction;
     private float knockbackDistance;
 
-
     /**
-     * Konstruiert ein neues MeleeSkill-Objekt mit dem angegebenen Projektil-Texturpfad, der Geschwindigkeit, dem Schaden, der Hitbox-Größe, dem Rückstoßabstand, der Ziel-Auswahl-Funktion und der Reichweite.
+     * Konstruiert ein neues MeleeSkill-Objekt mit dem angegebenen Projektil-Texturpfad, der
+     * Geschwindigkeit, dem Schaden, der Hitbox-Größe, dem Rückstoßabstand, der
+     * Ziel-Auswahl-Funktion und der Reichweite.
      *
-     * @param pathToTexturesOfProjectile Der Pfad zu den Texturdateien für das Nahkampf-Angriffsprojektil.
-     * @param projectileSpeed            Die Geschwindigkeit des Nahkampf-Angriffsprojektils.
-     * @param projectileDamage           Der Schaden, der durch das Nahkampf-Angriffsprojektil verursacht wird.
-     * @param projectileHitboxSize       Die Hitbox-Größe des Nahkampf-Angriffsprojektils.
-     * @param knockbackDistance          Der Rückstoßabstand, der bei jeder Kollision mit dem Nahkampf-Angriffsprojektil angewendet wird.
-     * @param selectionFunction          Die Ziel-Auswahl-Funktion für das Nahkampf-Angriffsprojektil.
-     * @param projectileRange            Die Reichweite des Nahkampf-Angriffsprojektils.
+     * @param pathToTexturesOfProjectile Der Pfad zu den Texturdateien für das
+     *     Nahkampf-Angriffsprojektil.
+     * @param projectileSpeed Die Geschwindigkeit des Nahkampf-Angriffsprojektils.
+     * @param projectileDamage Der Schaden, der durch das Nahkampf-Angriffsprojektil verursacht
+     *     wird.
+     * @param projectileHitboxSize Die Hitbox-Größe des Nahkampf-Angriffsprojektils.
+     * @param knockbackDistance Der Rückstoßabstand, der bei jeder Kollision mit dem
+     *     Nahkampf-Angriffsprojektil angewendet wird.
+     * @param selectionFunction Die Ziel-Auswahl-Funktion für das Nahkampf-Angriffsprojektil.
+     * @param projectileRange Die Reichweite des Nahkampf-Angriffsprojektils.
      */
-
     public MeleeSkill(
-        String pathToTexturesOfProjectile,
-        float projectileSpeed,
-        Damage projectileDamage,
-        Point projectileHitboxSize,
-        float knockbackDistance,
-        ITargetSelection selectionFunction,
-        float projectileRange) {
+            String pathToTexturesOfProjectile,
+            float projectileSpeed,
+            Damage projectileDamage,
+            Point projectileHitboxSize,
+            float knockbackDistance,
+            ITargetSelection selectionFunction,
+            float projectileRange) {
         this.pathToTexturesOfProjectile = pathToTexturesOfProjectile;
         this.projectileDamage = projectileDamage;
         this.projectileSpeed = projectileSpeed;
@@ -55,19 +55,19 @@ public class MeleeSkill implements ISkillFunction {
     }
 
     /**
-     * Führt die Nahkampf-Angriffs-Fähigkeit aus, indem eine Projektil-Entität erstellt und Schaden sowie Rückstoß auf jede Kollision mit einer anderen Entität angewendet wird.
+     * Führt die Nahkampf-Angriffs-Fähigkeit aus, indem eine Projektil-Entität erstellt und Schaden
+     * sowie Rückstoß auf jede Kollision mit einer anderen Entität angewendet wird.
      *
      * @param entity Die Entität, die die Fähigkeit ausführt.
      */
-
     @Override
     public void execute(Entity entity) {
         Entity meleeAttack = new Entity();
         PositionComponent epc =
-            (PositionComponent)
-                entity.getComponent(PositionComponent.class)
-                    .orElseThrow(
-                        () -> new MissingComponentException("PositionComponent"));
+                (PositionComponent)
+                        entity.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () -> new MissingComponentException("PositionComponent"));
         new PositionComponent(meleeAttack, epc.getPosition());
 
         Animation animation = AnimationBuilder.buildAnimation(pathToTexturesOfProjectile);
@@ -75,29 +75,28 @@ public class MeleeSkill implements ISkillFunction {
 
         Point aimedOn = selectionFunction.selectTargetPoint();
         Point targetPoint =
-            SkillTools.calculateLastPositionInRange(
-                epc.getPosition(), aimedOn, projectileRange);
+                SkillTools.calculateLastPositionInRange(
+                        epc.getPosition(), aimedOn, projectileRange);
         Point velocity =
-            SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
+                SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
         VelocityComponent vc =
-            new VelocityComponent(meleeAttack, velocity.x, velocity.y, animation, animation);
+                new VelocityComponent(meleeAttack, velocity.x, velocity.y, animation, animation);
         new ProjectileComponent(meleeAttack, epc.getPosition(), targetPoint);
 
         ICollide collide =
-            (a, b, from) -> {
-                if (b != entity) {
-                    b.getComponent(HealthComponent.class)
-                        .ifPresent(
-                            hc -> {
-                                ((HealthComponent) hc).receiveHit(projectileDamage);
-                                SkillTools.applyKnockback(b, entity, knockbackDistance);
-                                Game.removeEntity(meleeAttack);
-                            });
-                }
-            };
+                (a, b, from) -> {
+                    if (b != entity) {
+                        b.getComponent(HealthComponent.class)
+                                .ifPresent(
+                                        hc -> {
+                                            ((HealthComponent) hc).receiveHit(projectileDamage);
+                                            SkillTools.applyKnockback(b, entity, knockbackDistance);
+                                            Game.removeEntity(meleeAttack);
+                                        });
+                    }
+                };
 
         new HitboxComponent(
-            meleeAttack, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
+                meleeAttack, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
     }
-
 }

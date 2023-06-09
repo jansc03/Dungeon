@@ -118,7 +118,6 @@ public class TileLevel implements ILevel {
         }
     }
 
-
     @Override
     public void addFloorTile(FloorTile tile) {
         floorTiles.add(tile);

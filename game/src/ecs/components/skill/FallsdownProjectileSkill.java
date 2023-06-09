@@ -6,19 +6,16 @@ import ecs.components.collision.ICollide;
 import ecs.damage.Damage;
 import ecs.entities.Entity;
 import graphic.Animation;
-import level.elements.tile.Tile;
-import starter.Game;
-import tools.Point;
-
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
-
-import static starter.Game.currentLevel;
+import starter.Game;
+import tools.Point;
 
 /**
- * Die abstrakte Klasse FallsdownProjectileSkill implementiert das ISkillFunction-Interface und stellt eine Basisimplementierung für einen Projektil-Skill bereit,
- * bei dem das Projektil nach einer bestimmten Reichweite fällt.
+ * Die abstrakte Klasse FallsdownProjectileSkill implementiert das ISkillFunction-Interface und
+ * stellt eine Basisimplementierung für einen Projektil-Skill bereit, bei dem das Projektil nach
+ * einer bestimmten Reichweite fällt.
  */
 public abstract class FallsdownProjectileSkill implements ISkillFunction {
 
@@ -32,24 +29,25 @@ public abstract class FallsdownProjectileSkill implements ISkillFunction {
     private ITargetSelection selectionFunction;
     private float knockbackDistance;
 
-
     /**
      * Konstruktor für die FallsdownProjectileSkill-Klasse.
      *
      * @param pathToTexturesOfProjectile Der Pfad zu den Texturdateien des Projektils.
-     * @param projectileSpeed            Die Geschwindigkeit des Projektils.
-     * @param projectileDamage           Der Schaden, den das Projektil verursacht.
-     * @param projectileHitboxSize       Die Größe der Trefferbox des Projektils.
-     * @param selectionFunction          Die Funktion zur Auswahl des Zielpunkts.
-     * @param projectileRange            Die Reichweite des Projektils.
-     * @param knockbackDistance          Die Rückstoßdistanz, die auf getroffene Entitäten angewendet wird.
+     * @param projectileSpeed Die Geschwindigkeit des Projektils.
+     * @param projectileDamage Der Schaden, den das Projektil verursacht.
+     * @param projectileHitboxSize Die Größe der Trefferbox des Projektils.
+     * @param selectionFunction Die Funktion zur Auswahl des Zielpunkts.
+     * @param projectileRange Die Reichweite des Projektils.
+     * @param knockbackDistance Die Rückstoßdistanz, die auf getroffene Entitäten angewendet wird.
      */
-    public FallsdownProjectileSkill(String pathToTexturesOfProjectile,
-                                    float projectileSpeed, Damage projectileDamage,
-                                    Point projectileHitboxSize,
-                                    ITargetSelection selectionFunction,
-                                    float projectileRange,
-                                    float knockbackDistance) {
+    public FallsdownProjectileSkill(
+            String pathToTexturesOfProjectile,
+            float projectileSpeed,
+            Damage projectileDamage,
+            Point projectileHitboxSize,
+            ITargetSelection selectionFunction,
+            float projectileRange,
+            float knockbackDistance) {
         this.pathToTexturesOfProjectile = pathToTexturesOfProjectile;
         this.projectileDamage = projectileDamage;
         this.projectileSpeed = projectileSpeed;
@@ -70,7 +68,11 @@ public abstract class FallsdownProjectileSkill implements ISkillFunction {
 
         Entity projectile = new Entity();
 
-        PositionComponent epc = (PositionComponent) entity.getComponent(PositionComponent.class).orElseThrow(() -> new MissingComponentException("PositionComponent"));
+        PositionComponent epc =
+                (PositionComponent)
+                        entity.getComponent(PositionComponent.class)
+                                .orElseThrow(
+                                        () -> new MissingComponentException("PositionComponent"));
 
         new PositionComponent(projectile, epc.getPosition());
 
@@ -78,35 +80,46 @@ public abstract class FallsdownProjectileSkill implements ISkillFunction {
         new AnimationComponent(projectile, animation);
 
         Point aimedOn = selectionFunction.selectTargetPoint();
-        Point targetPoint = SkillTools.calculateLastPositionInRange(epc.getPosition(), aimedOn, projectileRange);
-        Point velocity = SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
+        Point targetPoint =
+                SkillTools.calculateLastPositionInRange(
+                        epc.getPosition(), aimedOn, projectileRange);
+        Point velocity =
+                SkillTools.calculateVelocity(epc.getPosition(), targetPoint, projectileSpeed);
 
-        VelocityComponent vc = new VelocityComponent(projectile, velocity.x, velocity.y, animation, animation);
+        VelocityComponent vc =
+                new VelocityComponent(projectile, velocity.x, velocity.y, animation, animation);
 
         new ProjectileComponent(projectile, epc.getPosition(), targetPoint);
 
-        ICollide collide = (a, b, from) -> {
-            if (b != entity) {
-                b.getComponent(HealthComponent.class).ifPresent(hc -> {
-                    ((HealthComponent) hc).receiveHit(projectileDamage);
-                    SkillTools.applyKnockback(b, entity, knockbackDistance);
-                    Game.removeEntity(projectile);
-                });
-            }
-        };
+        ICollide collide =
+                (a, b, from) -> {
+                    if (b != entity) {
+                        b.getComponent(HealthComponent.class)
+                                .ifPresent(
+                                        hc -> {
+                                            ((HealthComponent) hc).receiveHit(projectileDamage);
+                                            SkillTools.applyKnockback(b, entity, knockbackDistance);
+                                            Game.removeEntity(projectile);
+                                        });
+                    }
+                };
 
-        new HitboxComponent(projectile, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
+        new HitboxComponent(
+                projectile, new Point(0.25f, 0.25f), projectileHitboxSize, collide, null);
 
         Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                projectile.removeComponent(VelocityComponent.class);
+        timer.schedule(
+                new TimerTask() {
+                    @Override
+                    public void run() {
+                        projectile.removeComponent(VelocityComponent.class);
 
-                VelocityComponent fallVelocity = new VelocityComponent(projectile, 0.0f, -projectileSpeed, animation, animation);
-                projectile.addComponent(fallVelocity);
-            }
-        }, (long) (projectileRange * 100));
+                        VelocityComponent fallVelocity =
+                                new VelocityComponent(
+                                        projectile, 0.0f, -projectileSpeed, animation, animation);
+                        projectile.addComponent(fallVelocity);
+                    }
+                },
+                (long) (projectileRange * 100));
     }
-
 }

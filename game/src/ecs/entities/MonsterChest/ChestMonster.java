@@ -1,39 +1,39 @@
-package ecs.entities.monsters;
+package ecs.entities.MonsterChest;
 
 import dslToGame.AnimationBuilder;
-import ecs.GeneralGenerator;
 import ecs.components.*;
 import ecs.components.ai.AIComponent;
 import ecs.components.ai.fight.CollideAI;
-import ecs.components.ai.idle.WanderingWalk;
+import ecs.components.ai.idle.PatrouilleWalk;
 import ecs.components.ai.transition.RangeTransition;
+import ecs.damage.Damage;
+import ecs.damage.DamageType;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
+import ecs.entities.Hero;
+import ecs.entities.monsters.BasicMonster;
 import ecs.items.ItemData;
 import graphic.Animation;
 import java.util.List;
 import java.util.logging.Logger;
 import logging.CustomLogLevel;
+import starter.Game;
+import tools.Point;
 
-public class Goblin extends BasicMonster {
-    public final Logger goblinLogger = Logger.getLogger(this.getClass().getName());
+public class ChestMonster extends BasicMonster {
+    int damage = 0;
+    public static String ani = "character/monster/monsterChest";
+    private static final Logger LOGGER = Logger.getLogger(ChestMonster.class.getName());
 
-    public Goblin(List<ItemData> items) {
-        super(
-                0.2f,
-                0.2f,
-                7,
-                "monster/goblin/idleLeft",
-                "monster/goblin/idleRight",
-                "monster/goblin/runLeft",
-                "monster/goblin/runRight");
-        new PositionComponent(this);
-        setupInventory(items);
+    public ChestMonster(List<ItemData> items, Point p) {
+        super(0.3f, 0.3f, 20, ani, ani, ani, ani);
+        new PositionComponent(this, p);
         setupVelocityComponent();
         setupAnimationComponent();
         setupAIComponent();
         setupHitboxComponent();
         setupHealthComponent((int) hp);
+        setupInventory(items);
     }
 
     @Override
@@ -53,21 +53,22 @@ public class Goblin extends BasicMonster {
     @Override
     public void setupHitboxComponent() {
         new HitboxComponent(
-                this, HitboxComponent.DEFAULT_COLLIDER, HitboxComponent.DEFAULT_COLLIDER);
+                this,
+                (you, other, direction) -> attackSkill(other),
+                (you, other, direction) -> LOGGER.info("monsterCollision"));
     }
 
     @Override
     public void setupHealthComponent(int maxHealthPoints) {
-        // Funktion, die aufgerufen wird, wenn das Monster stirbt
         IOnDeathFunction onDeathFunction =
                 entity -> {
                     // Logik für das, was passieren soll, wenn das Monster stirbt
-                    System.out.println("Das Monster ist gestorben!");
+                    System.out.println("Das ChestMonster ist gestorben!");
                 };
 
         // Animationen für das Monster, wenn es Schaden erleidet oder stirbt
-        String pathToHitAnimation = "monster/goblin/hitAnimation";
-        String pathToDieAnimation = "monster/goblin/idleLeft";
+        String pathToHitAnimation = "monster/chort/hitAnimation";
+        String pathToDieAnimation = "monster/chort/dieAnimation";
         Animation hitAnimation = AnimationBuilder.buildAnimation(pathToHitAnimation);
         Animation dieAnimation = AnimationBuilder.buildAnimation(pathToDieAnimation);
 
@@ -77,21 +78,40 @@ public class Goblin extends BasicMonster {
 
     @Override
     public void setupAIComponent() {
-        WanderingWalk wanderingWalk = new WanderingWalk(5.0f, 2, 2000);
+        float radius = 7.0f;
+        int numberCheckpoints = 3;
+        int pauseTime = 2000;
+        PatrouilleWalk.MODE mode = PatrouilleWalk.MODE.LOOP;
+        PatrouilleWalk patrouilleWalk =
+                new PatrouilleWalk(radius, numberCheckpoints, pauseTime, mode);
         float rushRange = 0.3f;
         CollideAI collideAI = new CollideAI(rushRange);
-        float transitionRange = 2.0f;
+        float transitionRange = 3.0f;
         RangeTransition rangeTransition = new RangeTransition(transitionRange);
-        new AIComponent(this, collideAI, wanderingWalk, rangeTransition);
+        new AIComponent(this, collideAI, patrouilleWalk, rangeTransition);
+    }
+
+    private void attackSkill(Entity entity) {
+        LOGGER.info("ChestMonster attack" + entity.getClass().getSimpleName());
+        Damage damage = new Damage(this.damage, DamageType.PHYSICAL, this);
+        if (entity instanceof Hero) {
+            Game.getHero().stream()
+                    .flatMap(e -> e.getComponent(HealthComponent.class).stream())
+                    .map(HealthComponent.class::cast)
+                    .forEach(
+                            healthComponent -> {
+                                healthComponent.receiveHit(damage);
+                            });
+        }
     }
 
     public void setupInventory(List<ItemData> items) {
-        new InventoryComponent(this, 10);
+        new InventoryComponent(this, items.size());
         for (ItemData i : items) {
             InventoryComponent inv =
                     (InventoryComponent) this.getComponent(InventoryComponent.class).get();
             inv.addItem(i);
-            goblinLogger.log(
+            LOGGER.log(
                     CustomLogLevel.INFO,
                     "item: "
                             + i.getItemType()
@@ -103,35 +123,37 @@ public class Goblin extends BasicMonster {
 
     @Override
     public void onDeath(Entity entity) {
-        dropItems(entity);
-        goblinLogger.log(CustomLogLevel.INFO, "Chort has dropped Items");
+        spawnChest(entity);
+        LOGGER.log(CustomLogLevel.INFO, this.getClass().getSimpleName() + " has dropped Items");
     }
+
     /**
-     * method to drop Items when entity dies(the default iOnDrop had some issues that we could not
-     * figure out)
+     * creates a Chest wich the Player can Loot at the position the Monster dies and with the
+     * Inventory of the Monster
      *
      * @param entity
      */
-    private void dropItems(Entity entity) {
-        InventoryComponent inventoryComponent =
+    private void spawnChest(Entity entity) {
+        InventoryComponent
+                inventoryComponent = // items to spawn Chest with (inventory of the Monster)
                 entity.getComponent(InventoryComponent.class)
-                        .map(InventoryComponent.class::cast)
-                        .orElseThrow(
-                                () ->
-                                        createMissingComponentException(
-                                                InventoryComponent.class.getName(), entity));
-        PositionComponent positionComponent =
+                                .map(InventoryComponent.class::cast)
+                                .orElseThrow(
+                                        () ->
+                                                createMissingComponentException(
+                                                        InventoryComponent.class.getName(),
+                                                        entity));
+        PositionComponent positionComponent = // pos to spawn Chest(pos Monster died)
                 entity.getComponent(PositionComponent.class)
                         .map(PositionComponent.class::cast)
                         .orElseThrow(
                                 () ->
                                         createMissingComponentException(
                                                 PositionComponent.class.getName(), entity));
-        List<ItemData> itemData = inventoryComponent.getItems();
-
-        for (ItemData i : itemData) {
-            GeneralGenerator.getInstance().dropItems(i, positionComponent.getPosition());
-        }
+        new Chest(
+                inventoryComponent.getItems(),
+                positionComponent.getPosition()); // creating LootChest
+        Game.getEntitiesToRemove().add(this); // deleting Monster
     }
 
     private static MissingComponentException createMissingComponentException(

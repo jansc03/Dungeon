@@ -1,9 +1,7 @@
 package ecs.components.ai.idle;
 
-import com.badlogic.gdx.math.Vector2;
 import ecs.components.ai.AITools;
 import ecs.entities.Entity;
-import level.elements.tile.Tile;
 import tools.Constants;
 
 public class GhostIdle implements IIdleAI {
@@ -28,7 +26,8 @@ public class GhostIdle implements IIdleAI {
 
                 if (currentBreak >= breakTime) {
                     currentBreak = 0;
-                    AITools.move(ghostEntity, AITools.calculatePathToRandomTileInRange(ghostEntity, 1));
+                    AITools.move(
+                            ghostEntity, AITools.calculatePathToRandomTileInRange(ghostEntity, 1));
                 }
             }
         } else {
