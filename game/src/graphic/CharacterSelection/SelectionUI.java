@@ -29,57 +29,14 @@ public class SelectionUI<T extends Actor> extends ScreenController<T>{
         createButton(this::createArcher,"Archer",1.7f);
         createButton(this::createMage,"Mage",2f);
         createButton(this::createKnight,"Knight",2.5f);
-        /*ScreenButton archer=
-            new ScreenButton("Archer", new Point(0f, 0f), new TextButtonListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Game.getEntitiesToRemove().add(Game.getHero().get());
-                    Game.setHero(new Archer());
-                    hideSelection();
-                }
-            },new TextButtonStyleBuilder(FontBuilder.DEFAULT_FONT).setFontColor(Color.WHITE).setOverFontColor(Color.BLACK).build());
-        archer.setPosition((Constants.WINDOW_WIDTH) / 2f - archer.getWidth() + 20,
-            (Constants.WINDOW_HEIGHT) / 2f + archer.getHeight(),
-            Align.center | Align.bottom);
-        archer.setColor(Color.BROWN);
-        ScreenButton night=
-            new ScreenButton("night", new Point(0f, 0f), new TextButtonListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Game.getEntitiesToRemove().add(Game.getHero().get());
-                    Game.setHero(new Knight());
-                    hideSelection();
-                }
-            },new TextButtonStyleBuilder(FontBuilder.DEFAULT_FONT).setFontColor(Color.WHITE).setOverFontColor(Color.BLACK).build());
-        night.setPosition((Constants.WINDOW_WIDTH) / 2f - night.getWidth() + 20,
-            (Constants.WINDOW_HEIGHT) / 1.7f + night.getHeight(),
-            Align.center | Align.bottom);
-        night.setColor(Color.BROWN);
-        ScreenButton mage=
-            new ScreenButton("Mage", new Point(0f, 0f), new TextButtonListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    Game.getEntitiesToRemove().add(Game.getHero().get());
-                    Game.setHero(new Mage());
-                    hideSelection();
-                }
-            },new TextButtonStyleBuilder(FontBuilder.DEFAULT_FONT).setFontColor(Color.WHITE).setOverFontColor(Color.BLACK).build());
-        mage.setPosition((Constants.WINDOW_WIDTH) / 2f - mage.getWidth() + 20,
-            (Constants.WINDOW_HEIGHT) / 2.5f + mage.getHeight(),
-            Align.center | Align.bottom);
-        //add((T)archer);
-        add((T)mage);
-        add((T)night);
-        hideSelection();*/
+
     }
 
     public void showSelection(){
-        Game.togglePause();
         this.forEach((Actor s) -> s.setVisible(true));
         LOGGER.info("Game Paused and Selection shown");
     }
     public void hideSelection(){
-        Game.togglePause();
         this.forEach((Actor s)->s.setVisible(false));
         LOGGER.info("Game Unpaused and Selection hidden");
     }
