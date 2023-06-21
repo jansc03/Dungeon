@@ -3,6 +3,7 @@ package ecs.entities;
 import ecs.components.AnimationComponent;
 import ecs.components.HitboxComponent;
 import ecs.components.collision.ICollide;
+import ecs.entities.Charakterklassen.Hero;
 import graphic.Animation;
 import java.util.List;
 import level.elements.tile.Tile;

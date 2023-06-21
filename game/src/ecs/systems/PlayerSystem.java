@@ -7,7 +7,7 @@ import ecs.components.MissingComponentException;
 import ecs.components.PlayableComponent;
 import ecs.components.VelocityComponent;
 import ecs.entities.Entity;
-import ecs.entities.Hero;
+import ecs.entities.Charakterklassen.Hero;
 import ecs.items.BagPack;
 import ecs.items.ItemData;
 import ecs.items.ItemType;

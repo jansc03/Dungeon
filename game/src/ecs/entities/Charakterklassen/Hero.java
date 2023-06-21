@@ -1,4 +1,4 @@
-package ecs.entities;
+package ecs.entities.Charakterklassen;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.*;
@@ -6,8 +6,10 @@ import ecs.components.AnimationComponent;
 import ecs.components.PositionComponent;
 import ecs.components.VelocityComponent;
 import ecs.components.skill.*;
+import ecs.components.stats.StatsComponent;
 import ecs.components.xp.ILevelUp;
 import ecs.components.xp.XPComponent;
+import ecs.entities.Entity;
 import graphic.Animation;
 import java.util.logging.Logger;
 import logging.CustomLogLevel;
@@ -41,22 +43,18 @@ public class Hero extends Entity implements ILevelUp {
     private Skill rageSkill;
 
     /** Entity with Components */
-    public Hero() {
+    public Hero(int sworddamage,int maxHealth) {
         super();
         new PositionComponent(this);
         new XPComponent(this, this);
         new SkillComponent(this);
+        new StatsComponent(this);
         setupVelocityComponent();
         setupAnimationComponent();
         setupHitboxComponent();
         PlayableComponent pc = new PlayableComponent(this);
-        setupFireballSkill();
-        setupSwordSkill();
-        setupBoomerangSkill();
-        setupBlueFireBallSkill();
-        pc.setSkillSlot1(boomerangSkill);
-        pc.setSkillSlot2(blueFireBallSkill);
-        setupHealthComponent(20);
+        setupSwordSkill(sworddamage);
+        setupHealthComponent(maxHealth);
         setInventoryComponent();
     }
 
@@ -78,22 +76,37 @@ public class Hero extends Entity implements ILevelUp {
 
     private void setupFireballSkill() {
         firstSkill =
-                new Skill(
-                        new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+            new Skill(
+                new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
+        this.getComponent(SkillComponent.class)
+            .ifPresent(s -> ((SkillComponent) s).addSkill(firstSkill));
+        LOGGER.log(CustomLogLevel.INFO, "FireballSkill setup");
+        System.out.println("setup the skill");
     }
 
-    private void setupSwordSkill() {
+    private void setupSwordSkill(int damage) {
         secondSkill =
-                new Skill(new SwordSkill(SkillTools::getCursorPositionAsPoint), attackCoolDown);
+                new Skill(new SwordSkill(SkillTools::getCursorPositionAsPoint,damage), attackCoolDown);
+        this.getComponent(SkillComponent.class)
+            .ifPresent(s -> ((SkillComponent) s).addSkill(secondSkill));
+        this.getComponent(PlayableComponent.class)
+            .ifPresent(p -> ((PlayableComponent) p).setSkillSlot1(secondSkill));
+        LOGGER.log(CustomLogLevel.INFO, "SwordSKill setup");
     }
 
     private void setupBoomerangSkill() {
         boomerangSkill = new Skill(new BoomerangSkill(SkillTools::getCursorPositionAsPoint), 0);
+        this.getComponent(SkillComponent.class)
+            .ifPresent(s -> ((SkillComponent) s).addSkill(boomerangSkill));
+        LOGGER.log(CustomLogLevel.INFO, "BoomerangSkill setup");
     }
 
     private void setupBlueFireBallSkill() {
         blueFireBallSkill =
                 new Skill(new BlueFiraballSkill(SkillTools::getCursorPositionAsPoint), 0);
+        this.getComponent(SkillComponent.class)
+            .ifPresent(s -> ((SkillComponent) s).addSkill(blueFireBallSkill));
+        LOGGER.log(CustomLogLevel.INFO, "blueFireballSKill setup");
     }
 
     private void setupHitboxComponent() {
@@ -120,11 +133,11 @@ public class Hero extends Entity implements ILevelUp {
         new HealthComponent(this, maxHealthPoints, onDeathFunction, hitAnimation, dieAnimation);
     }
 
-    public int getDamage() {
+    public float getDamage() {
         return (int) damage;
     }
 
-    public void setDamage(int d) {
+    public void setDamage(float d) {
         damage = d;
     }
 

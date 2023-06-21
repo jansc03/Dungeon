@@ -11,7 +11,7 @@ import ecs.damage.Damage;
 import ecs.damage.DamageType;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
-import ecs.entities.Hero;
+import ecs.entities.Charakterklassen.Hero;
 import ecs.items.ItemData;
 import graphic.Animation;
 import java.util.List;

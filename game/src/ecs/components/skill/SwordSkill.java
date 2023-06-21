@@ -5,7 +5,7 @@ import ecs.damage.DamageType;
 import tools.Point;
 
 public class SwordSkill extends MeleeSkill {
-    public SwordSkill(ITargetSelection targetSelection) {
+    public SwordSkill(ITargetSelection targetSelection,int damageAmount) {
         super(
                 "weapon",
                 0.1f,
