@@ -9,7 +9,6 @@ import controller.ScreenController;
 import ecs.entities.Charakterklassen.Archer;
 import ecs.entities.Charakterklassen.Knight;
 import ecs.entities.Charakterklassen.Mage;
-import ecs.entities.MonsterChest.ChestMonster;
 import graphic.hud.FontBuilder;
 import graphic.hud.ScreenButton;
 import graphic.hud.TextButtonListener;
