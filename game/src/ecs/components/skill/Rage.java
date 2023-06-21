@@ -2,8 +2,8 @@ package ecs.components.skill;
 
 import ecs.components.HealthComponent;
 import ecs.components.VelocityComponent;
-import ecs.entities.Entity;
 import ecs.entities.Charakterklassen.Hero;
+import ecs.entities.Entity;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;

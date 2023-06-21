@@ -33,9 +33,8 @@ public class Hero extends Entity implements ILevelUp {
     private final String pathToRunRight = "knight/runRight";
     private Skill swordSkill;
 
-
     /** Entity with Components */
-    public Hero(int sworddamage,int maxHealth) {
+    public Hero(int sworddamage, int maxHealth) {
         super();
         new PositionComponent(this);
         new XPComponent(this, this);
@@ -57,7 +56,7 @@ public class Hero extends Entity implements ILevelUp {
     private void setupVelocityComponent() {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
         Animation moveLeft = AnimationBuilder.buildAnimation(pathToRunLeft);
-        new VelocityComponent(this,xSpeed,ySpeed,moveLeft, moveRight);
+        new VelocityComponent(this, xSpeed, ySpeed, moveLeft, moveRight);
     }
 
     private void setupAnimationComponent() {
@@ -66,15 +65,15 @@ public class Hero extends Entity implements ILevelUp {
         new AnimationComponent(this, idleLeft, idleRight);
     }
 
-
-
     private void setupSwordSkill(int damage) {
         swordSkill =
-                new Skill(new SwordSkill(SkillTools::getCursorPositionAsPoint,damage), attackCoolDown);
+                new Skill(
+                        new SwordSkill(SkillTools::getCursorPositionAsPoint, damage),
+                        attackCoolDown);
         this.getComponent(SkillComponent.class)
-            .ifPresent(s -> ((SkillComponent) s).addSkill(swordSkill));
+                .ifPresent(s -> ((SkillComponent) s).addSkill(swordSkill));
         this.getComponent(PlayableComponent.class)
-            .ifPresent(p -> ((PlayableComponent) p).setSkillSlot1(swordSkill));
+                .ifPresent(p -> ((PlayableComponent) p).setSkillSlot1(swordSkill));
         LOGGER.log(CustomLogLevel.INFO, "SwordSKill setup");
     }
 
@@ -112,6 +111,7 @@ public class Hero extends Entity implements ILevelUp {
 
     @Override
     public void onLevelUp(long level) {}
+
     public void levelUp() {
         XPComponent xpC = (XPComponent) this.getComponent(XPComponent.class).get();
         xpC.addXP(xpC.getXPToNextLevel());

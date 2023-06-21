@@ -16,8 +16,8 @@ import controller.SystemController;
 import ecs.GeneralGenerator;
 import ecs.components.MissingComponentException;
 import ecs.components.PositionComponent;
-import ecs.entities.Entity;
 import ecs.entities.Charakterklassen.Hero;
+import ecs.entities.Entity;
 import ecs.entities.MonsterChest.MonsterChest;
 import ecs.entities.Teleportsystem;
 import ecs.entities.monsters.Chort;
@@ -128,7 +128,7 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         controller.add(systems);
         pauseMenu = new PauseMenu<>();
         controller.add(pauseMenu);
-        hero = new Hero(1,20);
+        hero = new Hero(1, 20);
         SelectionUI selectionUI = new SelectionUI<>();
         controller.add(selectionUI);
         Game.togglePause();
