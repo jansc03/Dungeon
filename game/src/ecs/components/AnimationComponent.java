@@ -109,4 +109,12 @@ public class AnimationComponent extends Component {
     public Animation getIdleRight() {
         return idleRight;
     }
+
+    public Object getRunRight() {
+        return null;
+    }
+
+    public Object getRunLeft() {
+        return null;
+    }
 }

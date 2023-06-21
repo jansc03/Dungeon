@@ -31,10 +31,10 @@ triggerInteraction erlaubt es eine Interaktion jederzeit auszuführen und wenn d
 
 ## Testabdeckung
 
-Bis auf die `InteractionComponent#DefaultInteraction` sind für alle Methoden Tests vorhanden. 
+Bis auf die `InteractionComponent#DefaultInteraction` sind für alle Methoden Tests vorhanden.
 Die Defaultinteraktion ist ein ausgeben auf der Konsole und dadurch schwer zu testen bzw. ist das Testen sehr unschön.
 ```
-    @Test
+    @FallenTest
     public void defaultInteraction() {
         final PrintStream originalOut = System.out;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

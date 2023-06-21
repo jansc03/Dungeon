@@ -5,25 +5,25 @@ import ecs.entities.Entity;
 
 public abstract class BasicMonster extends Entity implements IOnDeathFunction {
     /** Die horizontale Bewegungsgeschwindigkeit des Monsters. */
-    protected final float xSpeed;
+    public final float xSpeed;
 
     /** Die vertikale Bewegungsgeschwindigkeit des Monsters. */
-    protected final float ySpeed;
+    public final float ySpeed;
 
     /** Die Gesundheitspunkte des Monsters. */
-    protected final float hp;
+    public final float hp;
 
     /** Der Dateipfad zur Leerlauf-Animation, wenn das Monster nach links schaut. */
-    protected String pathToIdleLeft;
+    public String pathToIdleLeft;
 
     /** Der Dateipfad zur Leerlauf-Animation, wenn das Monster nach rechts schaut. */
-    protected String pathToIdleRight;
+    public String pathToIdleRight;
 
     /** Der Dateipfad zur Lauf-Animation, wenn das Monster nach links schaut. */
-    protected String pathToRunLeft;
+    public String pathToRunLeft;
 
     /** Der Dateipfad zur Lauf-Animation, wenn das Monster nach rechts schaut. */
-    protected String pathToRunRight;
+    public String pathToRunRight;
 
     /**
      * Konstruiert ein BasicMonster-Objekt mit den angegebenen x- und y-Geschwindigkeiten,

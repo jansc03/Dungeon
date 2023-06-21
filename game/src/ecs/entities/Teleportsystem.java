@@ -6,18 +6,18 @@ import starter.Game;
 
 public class Teleportsystem {
 
-    private Teleportpads pad1;
+    public Teleportpads pad1;
 
-    private Teleportpads pad2;
+    public Teleportpads pad2;
 
-    private Boolean usable = true;
-    private int ticcounter = 5 * 30 + 1;
+    public Boolean usable = true;
+    public int ticcounter = 5 * 30 + 1;
 
     /**
      * Wird vom jeweiligen betretenen Pad aufgerufen, um dann den Helden zu teleportieren. Dies
      * geschieht durch aufrufen der Positioncomponenten der Pads und des Helden
      */
-    void usedPad(Teleportpads UsedPad) {
+    public void usedPad(Teleportpads UsedPad) {
         if (usable && ticcounter > 5 * 30) {
             ticcounter = 0;
             PositionComponent pch =
@@ -55,7 +55,7 @@ public class Teleportsystem {
         }
     }
     /** schaut ob eines der Pads keine Nutzungen mehr und löscht die dann aus der Entityliste */
-    private void checkUsages() {
+    public void checkUsages() {
         if (pad1.getUsages() == 0 || pad2.getUsages() == 0) {
             Game.removeEntity(pad1);
             Game.removeEntity(pad2);

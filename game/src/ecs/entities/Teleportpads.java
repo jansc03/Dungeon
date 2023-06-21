@@ -11,6 +11,7 @@ import level.elements.tile.Tile;
 public class Teleportpads extends Traps implements ICollide {
 
     private Teleportsystem mySystem;
+    private AnimationComponent animationComponent;
 
     /** Teleportpads aussehen verändern */
     public static final List<String> DEFAULT_UNUSED_ANIMATION_FRAMES =
@@ -30,7 +31,7 @@ public class Teleportpads extends Traps implements ICollide {
 
     /** stellt Animationen zum änddern des Aussehens der Falle */
     private void setupAnimationComponent() {
-        AnimationComponent ac =
+        animationComponent =
                 new AnimationComponent(
                         this,
                         new Animation(DEFAULT_UNUSED_ANIMATION_FRAMES, 100, false),

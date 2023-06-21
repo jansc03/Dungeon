@@ -95,7 +95,7 @@ public class Chort extends BasicMonster {
         new AIComponent(this, collideAI, patrouilleWalk, rangeTransition);
     }
 
-    private void attackSkill(Entity entity) {
+    public void attackSkill(Entity entity) {
         LOGGER.info("Chort attack" + entity.getClass().getSimpleName());
         Damage damage = new Damage(2, DamageType.PHYSICAL, this);
         if (entity instanceof Hero) {
