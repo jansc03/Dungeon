@@ -131,7 +131,9 @@ public class Game extends ScreenAdapter implements IOnLevelLoader {
         hero = new Hero(1,20);
         SelectionUI selectionUI = new SelectionUI<>();
         controller.add(selectionUI);
+        Game.togglePause();
         selectionUI.showSelection();
+        Game.togglePause();
         levelAPI = new LevelAPI(batch, painter, new WallGenerator(new RandomWalkGenerator()), this);
         levelAPI.loadLevel(LEVELSIZE);
         createSystems();

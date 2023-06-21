@@ -9,7 +9,7 @@ public class BoomerangSkill extends ReturnProjectileSkill {
         super(
                 "skills/boomerang/",
                 0.3f,
-                new Damage(1, DamageType.PHYSICAL, null),
+                new Damage(10, DamageType.PHYSICAL, null),
                 new Point(1, 1),
                 targetSelection,
                 5f,

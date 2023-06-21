@@ -24,6 +24,12 @@ public class SelectionUI<T extends Actor> extends ScreenController<T>{
     public SelectionUI() {
         this(new SpriteBatch());
     }
+
+    /**
+     * creates new UI to select character claas
+     * contains 3 buttons(Archer,Knight,Mage)
+     * @param batch
+     */
     public SelectionUI(SpriteBatch batch) {
         super(batch);
         createButton(this::createArcher,"Archer",1.7f);
@@ -32,14 +38,28 @@ public class SelectionUI<T extends Actor> extends ScreenController<T>{
 
     }
 
+    /**
+     * Shows selection UI
+     */
     public void showSelection(){
         this.forEach((Actor s) -> s.setVisible(true));
         LOGGER.info("Game Paused and Selection shown");
     }
+
+    /**
+     * Hides UI
+     */
     public void hideSelection(){
         this.forEach((Actor s)->s.setVisible(false));
         LOGGER.info("Game Unpaused and Selection hidden");
     }
+
+    /**
+     * creates a button for the UI with the given variables
+     * @param icreateHero creates a hero claas (Knight,MAge,Archer)
+     * @param heroName Contains the button name (Knight,MAge,Archer)
+     * @param pos used to calculate button position
+     */
     public void createButton(IcreateHero icreateHero,String heroName,float pos){
         ScreenButton temp=
             new ScreenButton(heroName, new Point(0f, 0f), new TextButtonListener() {
@@ -57,14 +77,24 @@ public class SelectionUI<T extends Actor> extends ScreenController<T>{
         add((T)temp);
         LOGGER.info("Button for "+heroName+" was created and added to "+this.getClass().getSimpleName());
     }
+
+    /**
+     * Method for IcreateHero
+     */
     public void createArcher(){
         Game.setHero(new Archer());
         LOGGER.info("Archer created");
     }
+    /**
+     * Method for IcreateHero
+     */
     public void createKnight(){
         Game.setHero(new Knight());
         LOGGER.info("Knight created");
     }
+    /**
+     * Method for IcreateHero
+     */
     public void createMage(){
         Game.setHero(new Mage());
         LOGGER.info("Mage created");

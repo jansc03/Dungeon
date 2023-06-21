@@ -51,6 +51,10 @@ public class Mage extends Hero {
                                 + 3));
         damage = (float) (damage * 0.1); // increase damage
     }
+
+    /**
+     * Sets up BlueFireball skill on LevelUp for the Mage to use
+     */
     private void setupBlueFireBallSkill() {
         blueFireBallSkill =
             new Skill(new BlueFiraballSkill(SkillTools::getCursorPositionAsPoint), blueFireballCoolDown);
@@ -58,6 +62,9 @@ public class Mage extends Hero {
             .ifPresent(s -> ((SkillComponent) s).addSkill(blueFireBallSkill));
         LOGGER.log(CustomLogLevel.INFO, "blueFireballSKill setup");
     }
+    /**
+     * Sets up Fireball skill on LevelUp for the Mage to use
+     */
     private void setupFireballSkill() {
         fireballSkill =
             new Skill(
@@ -67,6 +74,10 @@ public class Mage extends Hero {
         LOGGER.log(CustomLogLevel.INFO, "FireballSkill setup");
         System.out.println("setup the skill");
     }
+
+    /**
+     * changes the velocity to the claas specific
+     */
     private void updateVelocityComponent(){
         if(this.getComponent(VelocityComponent.class).isPresent()){
             VelocityComponent vCp =
@@ -75,6 +86,11 @@ public class Mage extends Hero {
             vCp.setYVelocity(ySpeed);
         }
     }
+
+    /**
+     * creates Stats component
+     * and adds damage Modifier
+     */
     private void setupModifier() {
         if(this.getComponent(StatsComponent.class).isPresent()) {
             StatsComponent sCp =

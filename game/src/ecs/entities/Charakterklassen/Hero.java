@@ -13,7 +13,6 @@ import ecs.entities.Entity;
 import graphic.Animation;
 import java.util.logging.Logger;
 import logging.CustomLogLevel;
-import starter.Game;
 
 /**
  * The Hero is the player character. It's entity in the ECS. This class helps to setup the hero with
@@ -23,10 +22,7 @@ public class Hero extends Entity implements ILevelUp {
 
     private static final Logger LOGGER = Logger.getLogger(Hero.class.getName());
 
-    private final int fireballCoolDown = 1;
     private final int attackCoolDown = 0;
-    private final int healCooldown = 5;
-    private final int rageCooldown = 10;
     private final float xSpeed = 0.3f;
     private final float ySpeed = 0.3f;
     private float damage = 1;
@@ -35,12 +31,8 @@ public class Hero extends Entity implements ILevelUp {
     private final String pathToIdleRight = "knight/idleRight";
     private final String pathToRunLeft = "knight/runLeft";
     private final String pathToRunRight = "knight/runRight";
-    private Skill firstSkill;
-    private Skill secondSkill;
-    private Skill boomerangSkill;
-    private Skill blueFireBallSkill;
-    private Skill healSkill;
-    private Skill rageSkill;
+    private Skill swordSkill;
+
 
     /** Entity with Components */
     public Hero(int sworddamage,int maxHealth) {
@@ -65,7 +57,7 @@ public class Hero extends Entity implements ILevelUp {
     private void setupVelocityComponent() {
         Animation moveRight = AnimationBuilder.buildAnimation(pathToRunRight);
         Animation moveLeft = AnimationBuilder.buildAnimation(pathToRunLeft);
-        new VelocityComponent(this, xSpeed, ySpeed, moveLeft, moveRight);
+        new VelocityComponent(this,xSpeed,ySpeed,moveLeft, moveRight);
     }
 
     private void setupAnimationComponent() {
@@ -74,39 +66,16 @@ public class Hero extends Entity implements ILevelUp {
         new AnimationComponent(this, idleLeft, idleRight);
     }
 
-    private void setupFireballSkill() {
-        firstSkill =
-            new Skill(
-                new FireballSkill(SkillTools::getCursorPositionAsPoint), fireballCoolDown);
-        this.getComponent(SkillComponent.class)
-            .ifPresent(s -> ((SkillComponent) s).addSkill(firstSkill));
-        LOGGER.log(CustomLogLevel.INFO, "FireballSkill setup");
-        System.out.println("setup the skill");
-    }
+
 
     private void setupSwordSkill(int damage) {
-        secondSkill =
+        swordSkill =
                 new Skill(new SwordSkill(SkillTools::getCursorPositionAsPoint,damage), attackCoolDown);
         this.getComponent(SkillComponent.class)
-            .ifPresent(s -> ((SkillComponent) s).addSkill(secondSkill));
+            .ifPresent(s -> ((SkillComponent) s).addSkill(swordSkill));
         this.getComponent(PlayableComponent.class)
-            .ifPresent(p -> ((PlayableComponent) p).setSkillSlot1(secondSkill));
+            .ifPresent(p -> ((PlayableComponent) p).setSkillSlot1(swordSkill));
         LOGGER.log(CustomLogLevel.INFO, "SwordSKill setup");
-    }
-
-    private void setupBoomerangSkill() {
-        boomerangSkill = new Skill(new BoomerangSkill(SkillTools::getCursorPositionAsPoint), 0);
-        this.getComponent(SkillComponent.class)
-            .ifPresent(s -> ((SkillComponent) s).addSkill(boomerangSkill));
-        LOGGER.log(CustomLogLevel.INFO, "BoomerangSkill setup");
-    }
-
-    private void setupBlueFireBallSkill() {
-        blueFireBallSkill =
-                new Skill(new BlueFiraballSkill(SkillTools::getCursorPositionAsPoint), 0);
-        this.getComponent(SkillComponent.class)
-            .ifPresent(s -> ((SkillComponent) s).addSkill(blueFireBallSkill));
-        LOGGER.log(CustomLogLevel.INFO, "blueFireballSKill setup");
     }
 
     private void setupHitboxComponent() {
@@ -142,44 +111,7 @@ public class Hero extends Entity implements ILevelUp {
     }
 
     @Override
-    public void onLevelUp(long level) {
-        if (level == 1) { // unlock Skill
-            setupHealSkill();
-            this.getComponent(PlayableComponent.class)
-                    .ifPresent(p -> ((PlayableComponent) p).setSkillSlot3(healSkill));
-        }
-        if (level == 2) {
-            setupRageSkill();
-            this.getComponent(PlayableComponent.class)
-                    .ifPresent(p -> ((PlayableComponent) p).setSkillSlot4(rageSkill));
-        }
-        Hero hero = (Hero) Game.getHero().get(); // increase HP
-        hero.getComponent(HealthComponent.class)
-                .ifPresent(
-                        h ->
-                                ((HealthComponent) h)
-                                        .setMaximalHealthpoints(
-                                                ((HealthComponent) h).getMaximalHealthpoints()
-                                                        + 5));
-        damage = (float) (damage * 0.1); // increase damage
-    }
-
-    /** erstellt rage Skill für spätere nutzung */
-    private void setupRageSkill() {
-        rageSkill = new Skill(new Rage(), rageCooldown);
-        this.getComponent(SkillComponent.class)
-                .ifPresent(s -> ((SkillComponent) s).addSkill(rageSkill));
-        LOGGER.log(CustomLogLevel.INFO, "RageSkill setup");
-        System.out.println("setup the skill");
-    }
-    /** erstellt heal Skill für spätere nutzung */
-    private void setupHealSkill() {
-        healSkill = new Skill(new Heal(), healCooldown);
-        this.getComponent(SkillComponent.class)
-                .ifPresent(s -> ((SkillComponent) s).addSkill(healSkill));
-        LOGGER.log(CustomLogLevel.INFO, "HealSkill setup");
-    }
-
+    public void onLevelUp(long level) {}
     public void levelUp() {
         XPComponent xpC = (XPComponent) this.getComponent(XPComponent.class).get();
         xpC.addXP(xpC.getXPToNextLevel());

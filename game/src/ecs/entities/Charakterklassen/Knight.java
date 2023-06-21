@@ -54,6 +54,10 @@ public class Knight extends Hero {
                                 + 10));
         damage = (float) (damage * 0.1); // increase damage
     }
+
+    /**
+     * erstellt Rage Skill
+     */
     private void setupRageSkill() {
         rageSkill = new Skill(new Rage(), rageCooldown);
         this.getComponent(SkillComponent.class)
@@ -61,13 +65,18 @@ public class Knight extends Hero {
         LOGGER.log(CustomLogLevel.INFO, "RageSkill setup");
         System.out.println("setup the skill");
     }
-    /** erstellt heal Skill für spätere nutzung */
+    /**
+     * erstellt heal Skill
+     */
     private void setupHealSkill() {
         healSkill = new Skill(new Heal(), healCooldown);
         this.getComponent(SkillComponent.class)
             .ifPresent(s -> ((SkillComponent) s).addSkill(healSkill));
         LOGGER.log(CustomLogLevel.INFO, "HealSkill setup");
     }
+    /**
+     * changes the velocity to the claas specific
+     */
     private void updateVelocityComponent(){
         if(this.getComponent(VelocityComponent.class).isPresent()){
             VelocityComponent vCp =
@@ -76,6 +85,10 @@ public class Knight extends Hero {
             vCp.setYVelocity(ySpeed);
         }
     }
+    /**
+     * creates Stats component
+     * and adds damage Modifier
+     */
     private void setupModifier() {
         if(this.getComponent(StatsComponent.class).isPresent()) {
             StatsComponent sCp =

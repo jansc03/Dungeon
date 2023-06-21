@@ -46,12 +46,19 @@ public class Archer extends Hero {
                                 + 4));
         damage = (float) (damage * 0.1); // increase damage
     }
+
+    /**
+     * erstellt boomerang Skill on LevelUp
+     */
     private void setupBoomerangSkill() {
         boomerangSkill = new Skill(new BoomerangSkill(SkillTools::getCursorPositionAsPoint), boomerrangCoolDown);
         this.getComponent(SkillComponent.class)
             .ifPresent(s -> ((SkillComponent) s).addSkill(boomerangSkill));
         LOGGER.log(CustomLogLevel.INFO, "BoomerangSkill setup");
     }
+    /**
+     * changes the velocity to the claas specific
+     */
     private void updateVelocityComponent(){
         if(this.getComponent(VelocityComponent.class).isPresent()){
             VelocityComponent vCp =
@@ -60,6 +67,10 @@ public class Archer extends Hero {
             vCp.setYVelocity(ySpeed);
         }
     }
+    /**
+     * creates Stats component
+     * and adds damage Modifier
+     */
     private void setupModifier() {
         if(this.getComponent(StatsComponent.class).isPresent()) {
             StatsComponent sCp =
