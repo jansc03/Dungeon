@@ -1,4 +1,4 @@
-package Test;
+package MonsterTest;
 
 import ecs.components.*;
 import ecs.entities.Entity;

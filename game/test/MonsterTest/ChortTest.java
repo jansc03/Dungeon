@@ -1,7 +1,7 @@
-package Test;
+package MonsterTest;
 
 import ecs.entities.Entity;
-import ecs.entities.Hero;
+import ecs.entities.Charakterklassen.Hero;
 import ecs.entities.monsters.Chort;
 import ecs.items.ItemData;
 import org.junit.Test;

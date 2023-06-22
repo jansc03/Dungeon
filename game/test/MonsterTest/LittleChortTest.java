@@ -1,4 +1,4 @@
-/*package Test;
+/*package MonsterTest;
 
 import dslToGame.AnimationBuilder;
 import ecs.components.HealthComponent;
@@ -28,7 +28,6 @@ public class LittleChortTest {
 
         // Assert
         Assert.assertNotNull(littleChort);
-        // Add additional assertions for parameter values if necessary
     }
 
     @Test
@@ -39,11 +38,7 @@ public class LittleChortTest {
         littleChort.setAnimationBuilder(animationBuilderMock);
 
         // Act
-        littleChort.setupVelocityComponent();
-
-        // Assert
-        // Add assertions to verify the correct animations are set in the VelocityComponent
-    }
+        littleChort.setupVelocityComponent();    }
 
     @Test
     public void testSetupAnimationComponent() {
@@ -53,8 +48,6 @@ public class LittleChortTest {
         // Act
         littleChort.setupAnimationComponent();
 
-        // Assert
-        // Add assertions to verify the correct animations are set in the AnimationComponent
     }
 
     @Test
@@ -62,13 +55,10 @@ public class LittleChortTest {
         // Arrange
         HitboxComponent hitboxComponentMock = Mockito.mock(HitboxComponent.class);
         LittleChort littleChort = new LittleChort(new ArrayList<>());
-        littleChort.setHitboxComponent(hitboxComponentMock);
+        littleChort.setupHitboxComponent(hitboxComponentMock);
 
         // Act
         littleChort.setupHitboxComponent();
-
-        // Assert
-        // Add assertions to verify the correct callbacks are set in the HitboxComponent
     }
 
     @Test
@@ -76,14 +66,10 @@ public class LittleChortTest {
         // Arrange
         HealthComponent healthComponentMock = Mockito.mock(HealthComponent.class);
         LittleChort littleChort = new LittleChort(new ArrayList<>());
-        littleChort.setHealthComponent(healthComponentMock);
+        littleChort.setupHealthComponent(healthComponentMock);
 
         // Act
-        littleChort.setupHealthComponent(10);
-
-        // Assert
-        // Add assertions to verify the correct parameters are set in the HealthComponent
-    }
+        littleChort.setupHealthComponent(10);    }
 
     @Test
     public void testSetupAIComponent() {
@@ -98,9 +84,6 @@ public class LittleChortTest {
 
         // Act
         littleChort.setupAIComponent();
-
-        // Assert
-        // Add assertions to verify the correct AI components are set in the AIComponent
     }
 
     @Test
@@ -112,11 +95,7 @@ public class LittleChortTest {
         LittleChort littleChort = new LittleChort(new ArrayList<>());
 
         // Act
-        littleChort.setupInventory(items);
-
-        // Assert
-        // Add assertions to verify the items are correctly added to the inventory
-    }
+        littleChort.setupInventory(items);    }
 
     @Test
     public void testOnDeath() {
@@ -127,9 +106,6 @@ public class LittleChortTest {
 
         // Act
         littleChort.onDeath(entityMock);
-
-        // Assert
-        // Add assertions to verify the items are correctly dropped
     }
 }
 */
