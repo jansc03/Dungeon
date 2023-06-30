@@ -32,26 +32,12 @@ public class ItemData {
     /**
      * creates a new item data object.
      *
-     * @param itemType
-     * @param inventoryTexture
-     * @param worldTexture
      * @param itemName
      * @param description
-     * @param onCollect
-     * @param onDrop
-     * @param onUse
-     * @param damageModifier
      */
     public ItemData(
-            ItemType itemType,
-            Animation inventoryTexture,
-            Animation worldTexture,
             String itemName,
-            String description,
-            IOnCollect onCollect,
-            IOnDrop onDrop,
-            IOnUse onUse,
-            DamageModifier damageModifier) {
+            String description) {
         this.itemType = itemType;
         this.inventoryTexture = inventoryTexture;
         this.worldTexture = worldTexture;
@@ -79,15 +65,9 @@ public class ItemData {
             String itemName,
             String description) {
         this(
-                itemType,
-                inventoryTexture,
-                worldTexture,
-                itemName,
-                description,
-                ItemData::defaultCollect,
-                ItemData::defaultDrop,
-                ItemData::defaultUseCallback,
-                new DamageModifier());
+            itemName,
+                description
+        );
     }
 
     public ItemData() {

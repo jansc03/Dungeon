@@ -112,7 +112,7 @@ public class Goblin extends BasicMonster {
      *
      * @param entity
      */
-    private void dropItems(Entity entity) {
+    public void dropItems(Entity entity) {
         InventoryComponent inventoryComponent =
                 entity.getComponent(InventoryComponent.class)
                         .map(InventoryComponent.class::cast)

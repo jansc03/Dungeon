@@ -12,11 +12,13 @@ public class Traps extends Entity {
         new PositionComponent(this);
     }
 
-    void setUsages(int usages) {
+    public void setUsages(int usages) {
+        if (usages < 0) {
+            throw new IllegalArgumentException("Usages cannot be negative");
+        }
         this.usages = usages;
     }
-
-    int getUsages() {
+    public int getUsages() {
         return usages;
     }
 }

@@ -141,4 +141,5 @@ public class VelocityComponent extends Component {
     public Animation getMoveLeftAnimation() {
         return moveLeftAnimation;
     }
+
 }

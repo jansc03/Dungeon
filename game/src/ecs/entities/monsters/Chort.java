@@ -9,9 +9,9 @@ import ecs.components.ai.idle.PatrouilleWalk;
 import ecs.components.ai.transition.RangeTransition;
 import ecs.damage.Damage;
 import ecs.damage.DamageType;
+import ecs.entities.Charakterklassen.Hero;
 import ecs.entities.Chest;
 import ecs.entities.Entity;
-import ecs.entities.Hero;
 import ecs.items.ItemData;
 import graphic.Animation;
 import java.util.List;
@@ -95,7 +95,7 @@ public class Chort extends BasicMonster {
         new AIComponent(this, collideAI, patrouilleWalk, rangeTransition);
     }
 
-    private void attackSkill(Entity entity) {
+    public void attackSkill(Entity entity) {
         LOGGER.info("Chort attack" + entity.getClass().getSimpleName());
         Damage damage = new Damage(2, DamageType.PHYSICAL, this);
         if (entity instanceof Hero) {

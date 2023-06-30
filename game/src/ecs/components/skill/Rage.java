@@ -2,8 +2,8 @@ package ecs.components.skill;
 
 import ecs.components.HealthComponent;
 import ecs.components.VelocityComponent;
+import ecs.entities.Charakterklassen.Hero;
 import ecs.entities.Entity;
-import ecs.entities.Hero;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class Rage extends MagicSkill {
                 float ogY = vCp.getYVelocity();
                 vCp.setXVelocity(vCp.getXVelocity() * 1.25f);
                 vCp.setYVelocity(vCp.getYVelocity() * 1.25f);
-                int ogDamage = hero.getDamage();
+                float ogDamage = hero.getDamage();
                 hero.setDamage(ogDamage * 2);
                 durationTimer(vCp, ogX, ogY, hero, ogDamage);
                 LOGGER.log(
@@ -56,7 +56,7 @@ public class Rage extends MagicSkill {
      * @param ogDamage Damage before Increase
      */
     public void durationTimer(
-            VelocityComponent velocityComponent, float ogX, float ogY, Hero hero, int ogDamage) {
+            VelocityComponent velocityComponent, float ogX, float ogY, Hero hero, float ogDamage) {
         LOGGER.log(CustomLogLevel.INFO, this.getClass().getSimpleName() + " Effect Timer started");
         Timer timer = new Timer();
         timer.schedule(
